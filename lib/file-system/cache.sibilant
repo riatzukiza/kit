@@ -15,24 +15,28 @@
 (var value-of (R.prop "value"))
 (var name-of (R.prop "name"))
 (var same-symbol-as (R.eq-props "symbol" ))
-(var value-is-same-type (=> (branch-type )))
+;;(var value-is-same-type (=> (branch-type )))
 
 (type Cache
       (init ( value branch-type leaf-type (children (new Map))))
       (generic has (mth) (name children)
                (.has children name))
       (generic get (mth) (k value children)
-               (if (.has children k)
-                   (.get children k)
+               (remember children k
+                         (then (.find value k) sub-value
+                               (let node ((create this) sub-value))
+                               (.set children k node) node))) 
+      (generic each (mth) ( f value )
 
-                   (then (.find value k) sub-value
-                         (let node ((create this) sub-value))
-                         (.set children k node) node)))
+               (comment
+                (then-call-method this 'get name))
 
-      (generic each (mth) ( f value children)
-               (.each value (=> (name) (.then (this.get name) f) )))
+               ;;(let call-then (=> (name) (.then (this.get name) f) ))
+               ;;(defer-call  (this.get name) 'then f)
+               (each value (name)
+                     (.then (.get this name) f) ))
 
-      (generic filter-each (mth) ( filter (callback (=> (x) x)) dir (node this))
+      (generic filter-each (mth) (filter (callback (=> (x) x)) dir (node this))
                (.each node (cond filter callback) dir))
 
       (generic filtered-traverse (mth) ( filter (callback (=> (x) x)) dir (node this))
@@ -44,6 +48,10 @@
                                  (traverse callback) callback))))
 
 
+(macro remember (table value ...body)
+       `(if (.has @table @value)
+            (.get @table @value)
+            (.set @table @value (do ...@body))))
 (comment (let d ((create Cache) ((create Directory) ".") Directory File))
          (let ignored (R.either (R.equals ".git") (R.equals "node_modules")))
          (pipe d
@@ -51,28 +59,7 @@
                (.traverse  (aprint "dir"))
                (.catch  (aprint "failed to traverse"))))
 
-(let add (R.invoker 1 "add"))
-
-(def add-game (game)
-  "sets up the middleware and build tools for a game's directory"
-
-  (var bundle (browserify)
-       js-path (Path.join __dirname "games/" game.name "/js"))
-
-  ;;(var dir ((create Directory) js-path))
-
-  (add-routes game.name bundle)
-
-  (pipe (Promise.resolve (auto-compile game.name bundle))
-        (then-do (.traverse
-                  game
-                  (R.path ["value" "path"])
-                  (add R.__ bundle)
-                  ))))
 (specify FS-cache (extend Cache)
          (property leaf-type File)
          (property branch-type Directory)
          (property create (R.pipe (create Directory)(create Cache))))
-
-
-(let games (.create FS-cache "./games"))
