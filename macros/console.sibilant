@@ -1,0 +1,10 @@
+
+(docs "an alias for console.log"
+      tags [ logging ])
+(macro print (...args)
+       `(console.log ...@args))
+
+;; asyncronous printing utility
+(macro aprint (...a)
+       '(=> ((rest-param b))
+         (console.log ...@(spread-op a) (spread-op b))))

@@ -1,0 +1,30 @@
+(macro define-hidden-method (obj name args ...body)
+       `(Object.define-property
+         @obj
+         (quote @name)
+         { value (# @args ...@body) }))
+(macro define-native-method (native name args ...body)
+       `(define-hidden-method (get @native "prototype") @name @args ...@body))
+(macro native-type-extension (native ...methods)
+       (.map methods
+             (lambda (m)
+               `(define-native-method
+                    @native ...@(get m "contents")))))
+
+(native-type-extension Object
+                       (each (f))
+                       (keys (f))
+                       (each-key (f))
+                       (map (f))
+                       (has (k))
+                       (filter (f)))
+
+(native-type-extension Array
+                       (each (f))
+                       (has (i)))
+
+(native-type-extension Set
+                       (each (f)))
+
+(native-type-extension Map
+                       (each (f)))

@@ -1,0 +1,42 @@
+(include "./deps.sibilant"
+         "./macros")
+(macro join (...args)
+       `(Path.join ...@args))
+
+
+(import-namespace defs)
+
+(import-namespace js)
+(const Future (require "../async"))
+
+(const readdir (.lift Future.Array fs.readdir))
+(import (cond conditional) "../fp")
+
+
+(lift-from fs Future.Future
+           mkdir read-file write-file
+           stat unlink rmdir)
+
+(macro error! (...message)
+       `(throw (new Error (+ ...@message))))
+(comment (error! "attempted to make a value that already exists"))
+
+;;(const (literal Hashed-trie) (require "./../collection/hashed-trie"))
+
+
+
+
+
+(macro lets! (assignments ...body)
+       `(do ...@((map (content-of assignments) (assignment)
+                      `(let ...@(content-of assignment))))
+          ...@body))
+
+
+(include
+ "./lang.sibilant"
+ "./inode.sibilant"
+ "./file.sibilant"
+ "./directory.sibilant"
+;; "./tree.sibilant"
+ )

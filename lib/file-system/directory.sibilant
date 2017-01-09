@@ -1,0 +1,25 @@
+;; I wana call this stuff an "actor"
+(evented Directory (extend Evented)
+         (init (inode)
+               (set inode this.symbol this))
+         (gett path this.inode.path)
+         (generic watch (mth) (options)
+                  (.call Inode.watch this options)
+                  (.on ))
+         (generic make (mth) (path)
+                  (then (mkdir path )
+                        dir ((create this) inode.path)))
+
+         (generic fill (mth) (path)
+                  (pipe (this.make path)
+                        (catch ((create this) inode.path))))
+
+         (generic add (mth) (names path)
+                  (map (.resolve this names) (name)
+
+                       (this.make (join path name))))
+
+         (generic delete (mth) (path)
+                  (rmdir path)))
+
+(export Directory )
