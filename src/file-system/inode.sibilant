@@ -1,0 +1,42 @@
+
+(require! "chokidar")
+(macro memorize-gett (key obj value ...body)
+       `(gett @key (remember)))
+(macro read-alias (target alias)
+       `(gett @alias (@target) @target))
+
+(def-type Inode (init (*path (parent null) stats)
+                      (assign this.event (new Event-emitter)))
+  (read-alias  *path path)
+  (gett name (*path) (Path.basename path))
+  (gett ext (*path) (Path.ext path))
+
+  (proxy-from file string )
+  (proxy-from file buffer )
+  (proxy-from dir children)
+
+  (sett path (target path)
+        (then-do (rename path target)
+                 (assign this.*path target)))
+
+  (memo-key dir ((create Directory) this ))
+  (memo-key file ((create File) this ))
+  (generics (evented mth)
+            (stat  (path)
+                   (then (stat path) stats
+                         (assign this.stats stats) stats))))
+
+(macro evented (def-type name args ...body)
+       `(@def-type @name (...@(content-of args) event)
+          (pipe (do ...@body)
+                (catch (emit this "error"
+                             { error e
+                             method (quote @name)
+                             args [...@args] }))
+                (then value
+                      (emit this (quote @name) value)
+                      value))))
+
+
+
+(export Inode)

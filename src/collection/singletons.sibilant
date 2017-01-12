@@ -1,0 +1,42 @@
+(macro none? (value) `(or (= @value null) (undefined? @value)))
+(def-type Maybe (init (just value))
+  (generics (mth)
+
+            (just  (value) (not (none? value)))
+
+            (lift  (f just) (=> (x) ((create this) just (f x) )))
+
+            (bind  (f value just) (if (just value) (f value) Nothing))
+
+            (map  (f value just ) (.bind this (.lift this f just)))
+
+            (ap  (b value just) ((create this) just (b.value value) ))
+
+            (of (f just) ((create this ) just f ))))
+(export Maybe)
+
+(let maybe (create Maybe))
+(export maybe)
+
+(def-type Either (init (left right value))
+  (generics (mth)
+            (left  (value) (not (none? value)))
+            (right (value) (none? value))
+            (ap (b value left right )
+                ((create Either) left right (b.value value) ))
+            (map (f value left right)
+                 (either left right (.bind this f value left)))
+            (bind (f value left)
+                  (if (left value)
+                      (f) this))
+
+            (bimap  (f g   value left right)
+                    (if (left value) (f value)
+                        (right value) (g value)))))
+(export Either)
+(let either (create Either))
+(specify Nothing (extend Maybe)
+         (property value null)
+         (generics (mth)
+                   (bind () Nothing)
+                   (map  () Nothing)))

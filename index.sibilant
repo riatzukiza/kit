@@ -29,10 +29,9 @@
 
 (def singleton-array (a) [a])
 (def build-all (array options)
-  (.map-all-serial
-   Arr (=> (string) (build))
-   array))
-
+  (.map-all-serial Arr (=> (string) (build)) array))
+(type Evented (extend events.Event-emitter)
+      (init (opts) (events.Event-emitter.call this opts)))
 (type Source-unit
       (init (src js))
       (gmth watch (src js)

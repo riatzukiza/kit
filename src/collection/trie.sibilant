@@ -1,0 +1,76 @@
+(const R (require "ramda"))
+
+(var traverse (R.invoker 1 "traverse"))
+
+
+(macro remember (table value ...body)
+       `(if (.has @table @value)
+            (.get @table @value)
+            (lets ((value (do ...@body)))
+                  (.set @table @value value)
+                  value)))
+
+(macro generics (label-type ...body)
+       (map body (el)
+            (var name (.pop el.contents)
+                 arg (second el.contents))
+            `(generic @name @label-type @arg ...@(.slice  el.contents 2))))
+
+
+(def fill-branch  (node k)
+  (remember node.children k (trie k )))
+
+(def safely-reduce (array f initial)
+  (.reduce seq f (Maybe.of initial)))
+(alias-macro type def-type)
+
+(var value-of (R.prop "value")
+     name-of (R.prop "name")
+     same-symbol-as (R.eq-props "symbol" )
+     get-from (R.invoker "get" 1)
+     map-of (R.invoker "map" 1)
+     children-of (R.prop "children")
+     bimap-of (R.invoker "bimap" 2)
+     each (R.invoker "each" 1)
+     fpipe R.pipe)
+
+(var get-child-of (R.compose get-from children-of))
+(var from-children-of (map-of get-child-of))
+(def postorder (pred callback)
+  (fpipe (traverse pred callback)
+         (maybe pred)
+         (map callback)))
+(def-type Trie (init (name (value null) (parent null) (children (new Map))))
+
+  (generics (mth)
+
+            (has  (seq))
+
+            (find (seq)
+                  "safely locates a branch by an index sequence, returns a maybe"
+                  (safely-reduce seq from-children-of this))
+
+            (empty  () (trie null))
+
+            (set  (seq  value)
+                  "adds a leaf to the trie indexed by the given sequence. For every non existant branch along
+the provided path, a new branch node will be created, until the leaf has been successfully inserted. "
+                  (lets ((node (.reduce seq fill-branches this)))
+                        (assign node.value value))))
+
+  (generics (fluent mth)
+
+            (traverse (pred callback children)
+                      "visit each node of the tree, if any node matches the predicate, then execute the callback."
+                      (.each children
+                             (post-order-search
+                              pred
+                              callback)))
+
+            (each  (f children)
+                   "preorder traversal of all nodes in tree."
+                   (.traverse this has-value f))))
+
+(let trie (create Trie))
+
+

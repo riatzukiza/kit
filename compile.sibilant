@@ -1,0 +1,22 @@
+(include "./macros/macros")
+(import-namespace kit)
+(source-mapping-url "./compile.map")
+(require "")
+
+;; policies?
+(def compile-kit ()
+  (traverse  (node)
+            (pipe node.file
+                  ())))
+
+(def compile-source-file (path dest)
+  {
+  src ()
+  }
+  (then-let ((src (fill-file path))
+             (target (fill-file path)))))
+
+(def compile-markdown ())
+(def compile-browser-bundle ())
+(def evaluate-source-file ())
+

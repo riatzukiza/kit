@@ -1,0 +1,7 @@
+(def-type System
+    (init (path (cache (trie "/" ))
+                (tokens (tokenizer))))
+  (generics (mth)
+            (get (path trie)
+                 (remember trie path
+                           (on  (inode path) "error" (forget inode path))))))

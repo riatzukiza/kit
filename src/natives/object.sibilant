@@ -1,0 +1,46 @@
+(include "../../inc/macros")
+(import-namespace kit)
+
+(macro define-native-method (native name args ...body)
+       `(define-hidden-method (get @native "prototype") @name @args ...@body))
+
+(native-type-extension Object
+                       (each (f))
+                       (keys (f))
+                       (each-key (f))
+                       (map (f))
+                       (has (k))
+                       (reduce (f))
+                       (chain (f))
+                       (filter (f))
+                       (merge (o))
+                       (equals (o))
+                       (empty ()))
+
+(native-type-extension Array
+                       (each (f))
+                       (chain (f))
+                       (has (i))
+                       (of (f))
+                       (equals (o))
+                       (empty ())
+                       )
+
+(native-type-extension Set
+                       (each (f))
+                       (filter (f))
+                       (each-key (f))
+                       (keys (f))
+                       (reduce (f))
+                       (map (f))
+                       (chain (f))
+                       (merge (f))
+                       (of (f))
+                       (ap (o))
+
+
+                       )
+
+(native-type-extension Map
+                       (each (f)))
+

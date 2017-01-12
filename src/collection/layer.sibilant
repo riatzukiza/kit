@@ -1,0 +1,10 @@
+
+(type Layer
+      (init ())
+      (generics (mth)
+                (set (k v))
+                (add (k))
+                (delete (k))
+                (each (f))
+                (has (j))))
+(let layer (create Layer))

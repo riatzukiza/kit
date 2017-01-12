@@ -1,5 +1,5 @@
-(import-namespace core)
 (namespace kit)
+(import-namespace core)
 
 
 ;; Creates a string that starts and ends with \"
@@ -110,7 +110,8 @@
 ;;Enclosing delimiters
 (macro parenthetic (...opts) ["( " (interleave " " opts) " )"])
 
-(macro curly (...rest) [ "{ " ...(indent ...rest) " }"])
+(macro curly (...rest)
+       [ "{ " ...(indent ...rest) " }"])
 (macro square-bracket (...rest) [ "[ " ...(indent ...rest) " ]"])
 
 (macro block (...rest) `(curly ...@(interleave "\n" rest) ))
@@ -144,57 +145,6 @@
                 @name)
        )
 
-(macro type (name ...body)
-       (let type-name name)
-       (log-pretty "defining type" name)
-       (set namespace (output-formatter (transpile name))
-            (lambda (def-type name args)
-              (if (or name args)
-                  (do (if args null
-                          name (assign args name
-                                       name def-type
-                                       def-type `assign))
-
-                      `(@def-type @name ((create @type-name) ...@(content-of args))))
-
-                  (do (assign args def-type)
-                      `((create @type-name) ...@(content-of args))))))
-
-       `(const @name (literal (property symbol (Symbol (quote @name))) ...@body)))
-
-(macro set-macro (name args ...body)
-       `(set sibilant.macros.namespace (output-formatter (transpile @name))
-             (lambda @args ...@body)))
-(macro create-type (def-type type-name name args)
-       `(if (or name args)
-           (do (if args null
-                   name (assign args name
-                                name def-type
-                                def-type `assign))
-
-               `(@def-type @name ((create @type-name) ...@(content-of args))))
-
-           (do (assign args def-type) `((create @type-name) ...@(content-of args)))))
-
-(macro specify (name mod ...body)
-       (let type-name name)
-       (log-pretty "defining type" name)
-       (set namespace (output-formatter (transpile name))
-            (lambda (def-type name args)
-              (if (or name args)
-                  (do (if args null
-                          name (assign args name
-                                       name def-type
-                                       def-type `assign))
-
-                      `(@def-type @name ((create @type-name) ...@(content-of args))))
-
-                  (do (assign args def-type)
-                      `((create @type-name) ...@(content-of args))))))
-
-       `(const @name (...@(content-of mod)
-                         (literal (property symbol (Symbol (quote @name))) ...@body))))
-
 
 ;;keywords
 (macro function (name args ...body) ["function " `(method! @name @args ...@body)])
@@ -213,25 +163,6 @@
        ["catch(e) " `(block ...@body)])
 
 ;;(const (literal create mixin extend) (require "common/util/funcs"))
-
-
-
-(macro event (method emitter  event args ...body)
-       `(pipe  @emitter
-               (@method (quote @event) (=> @args ...@body))
-               (.once "error"
-
-                      (=> (err)
-                          (print "error on" (quote @event)
-                                 "of" (quote @emitter)
-                                 "given" (quote @args))
-                          (print err)))))
-
-(macro on (emitter event args ...body)
-       `(.on @emitter @event  (=> @args ...@body)))
-
-(macro once (emitter event args ...body)
-       `(event .once @emitter @event @args ...@body))
 
 
 (macro then (obj arg ...body)
@@ -271,11 +202,7 @@
                     `(set @target  (quote @(first (content-of arg)))
                           @(first (content-of arg)))
                     `(set @target (quote @arg) @arg))))
-(macro init (args ...body)
-       `(generic init (mth)  @args
-                 (set-for this ...@(content-of args))
-                 ...@body
-                 this))
+
 
 
 ;; A library I've not finished yet for working with http requests.
@@ -330,19 +257,6 @@
 (macro map (value args ...body)
        `(functor @value .map @args ...@body))
 
-(macro a-let (vars ...body)
-       `(then (.all Future.Object
-                    (p-map ...@ (map (content-of vars) ((literal contents ))
-                                     `(@ (first contents) @ (second contents)))))
-              (literal ...@ (map (content-of vars) ((literal contents))
-                                 (first contents)))
-
-
-              ...@body))
-(macro s-let! (vars ...body)
-       `(do ...@(map vars.contents ((literal contents))
-                 `(let @ (first contents) @ (second contents )))
-         ...@body))
 
 (macro lift (future-type name source)
        `(const @name (.lift @future-type @source)))

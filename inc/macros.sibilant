@@ -3,4 +3,6 @@
  "./function-expressions"
  "./defs"
  "./console"
+ "./objects"
+ "./events"
  )
