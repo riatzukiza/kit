@@ -1,28 +1,24 @@
 (type Future
 
-      (mth init (promise (default value null))
-           (assign this.promise promise
-                   this.value value ))
+      ( init (value))
+      (generics (mth)
+                (resolve (value )
+                 ((create this) (.resolve Promise value)))
 
-      (getter contents ()  (return this.promise))
+                (map (f) (.then this f))
 
-      (gmth resolve (value (type this))
-            ((create type) (.resolve Promise value)))
+                (then (on-success on-fail)
+                      (future (.then this.promise
+                                     on-success
+                                     on-fail)))
 
-      (gmth then (on-success on-fail)
-            (.then this.promise
-                   (=> (value)
-                       (assign this.value value)
-                       (on-success value))
-                   on-fail))
+                (catch (on-fail) (.catch this.promise on-fail))
 
-      (mth lift (f)
-
-           (=> ((dots args))
-               ((create this)
-                (make-promise (f (dots args)
-                                 (node-back (value) (success value)))))))
-
-      (gmth catch (on-fail) (.catch this.promise on-fail)))
+                (lift (f)
+                      (=> ((dots args))
+                          ((create this)
+                           (make-promise (f (dots args)
+                                            (node-back (value) (success value)))))))))
+(let future (create Future))
 
 (export Future)

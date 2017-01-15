@@ -1,20 +1,8 @@
-;; I wana call this stuff an "actor"
-(type Directory-list
-      (generics (mth)
-                ( get  (name path cache)
-                       (remember cache name ((create Inode ) (Path.join path name) this)))
-
-                ( set  (name))
-
-                ( add  (name path)
-                       (then (.make Directory (Path.join path name))))))
-
-(def-type Directory (inode (event inode.event))
+(def-type Directory (init (path inode (event inode.event)))
 
   (gett path (inode) inode.path)
   (gett keys (path) (.resolve Future.Array (readdir path)))
 
-  (gett children (keys))
   (remember-map-from keys children (key) (.get this key))
   (generics (evented mth)
 
@@ -23,14 +11,24 @@
 if the directory already exists, or the operation fails for some other reason. Call this instead of fill if you expect there to not be a directory, and you want to fail if there is."
                     (then-do (mkdir path ) inode))
 
-            ( fill  (inode (path inode.path))
+            ( fill  (inode (path inode.path) (filled "/"))
                     "given an inode, extract a path from the inode and create a directory at this location. Will not fail
 if the call to `mkdir` fails. Call this instead of make if you expect there may already be a directory, and you just want to make sure."
-                    (pipe (this.make inode path) (catch inode)))
+                    (def safely-mkdir (path-element)
+                      (assign filled (Path.join filled path-element))
+                      (pipe (mkdir filled)
+                            (then-do (inode.system.add filled))
+                            (catch false)))
+                    (.map-serial Future.Array
+                                 safely-mkdir
+                                 (.split (Path.resolve path)
+                                         Path.sep)))
 
             ( delete  (inode (path inode.path))
                       "Simply destroy the directory indexed by the inode given."
                       (rmdir path))))
+
+(let directory (create Directory))
 
 (comment (let d ((create Directory)))
          ;;creates an instance of d

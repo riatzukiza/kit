@@ -1,9 +1,5 @@
-
-(include "../../deps")
-(import-namespace defs)
-
-(import-namespace js)
-
+(include "../../inc/macros")
+(import-namespace kit)
 (const Path (require "path"))
 (const fs (require "fs"))
 (const join Path.join)

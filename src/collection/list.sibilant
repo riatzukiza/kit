@@ -21,8 +21,6 @@
          (generic bind (mth) (callback (r ((create this)))(l this))
                   (.reduce l  (=> (r v)
                                   (assign x (callback v))
-                                  (print "x" x)
-                                  (print "r" r)
                                   (functor x .each (x) (r.push x))
                                   r) r))
 

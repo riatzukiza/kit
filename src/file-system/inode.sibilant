@@ -1,31 +1,8 @@
 
-(require! "chokidar")
 (macro memorize-gett (key obj value ...body)
        `(gett @key (remember)))
 (macro read-alias (target alias)
        `(gett @alias (@target) @target))
-
-(def-type Inode (init (*path (parent null) stats)
-                      (assign this.event (new Event-emitter)))
-  (read-alias  *path path)
-  (gett name (*path) (Path.basename path))
-  (gett ext (*path) (Path.ext path))
-
-  (proxy-from file string )
-  (proxy-from file buffer )
-  (proxy-from dir children)
-
-  (sett path (target path)
-        (then-do (rename path target)
-                 (assign this.*path target)))
-
-  (memo-key dir ((create Directory) this ))
-  (memo-key file ((create File) this ))
-  (generics (evented mth)
-            (stat  (path)
-                   (then (stat path) stats
-                         (assign this.stats stats) stats))))
-
 (macro evented (def-type name args ...body)
        `(@def-type @name (...@(content-of args) event)
           (pipe (do ...@body)
@@ -37,6 +14,38 @@
                       (emit this (quote @name) value)
                       value))))
 
+(def-curried save (obj p val) (set obj o val) )
 
+;; An inode is an either.
+;; The operations on an inode depend on whether it is a file, or a directory.
+;; I am at least going to try wisp out again soon, even if I don't go to using full on clojure script
+;; or parenscript. I just know I need a fullerish lispity do.
 
+;; The file and the directory both will expect there to have already been an inode present before being created.
+(type Inode (init (*path
+                   (parent null)
+                   stats
+                   (event (new Event-emitter))))
+      (read-alias  *path path)
+
+      (gett name (*path) (Path.basename path))
+      (gett ext (*path) (Path.ext path))
+
+      (proxy-from file string )
+      (proxy-from file buffer )
+      (proxy-from dir children)
+
+      (sett path (target path)
+            (then-do (rename path target)
+                     (assign this.*path target)))
+
+      (memo-key dir ((create Directory) this ))
+      (memo-key file ((create File) this )))
+
+(generics (evented def-method Inode)
+          (stat  (path)
+                 (.then (stat path)
+                        (save this 'stats))))
 (export Inode)
+(var inode (create Inode))
+(export inode)

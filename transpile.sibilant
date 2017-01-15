@@ -1,0 +1,9 @@
+;; First task will be to copy the src directory to src-copy
+(import (inode) "./lib/file-system")
+
+(let src (inode "./src"))
+(let lib (inode "./lib"))
+;; These two will be just the tree structures, seperated from their paths.
+;; so we can use the names along the key sequences to generate new path structures
+;; using a new root.
+(map (R.pipe-p transpile (save-to lib.directory)))

@@ -1,0 +1,5 @@
+;; First task will be to copy the src directory to src-copy
+(import (inode) "./lib/file-system")
+
+(let src (inode "./src"))
+(let src-copy (.copy src.directory "./src-copy"))

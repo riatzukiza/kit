@@ -1,76 +1,122 @@
-(const R (require "ramda"))
+(include "./macros")
+(import-namespace kit)
+
+(unless process.env.DISABLE_SOURCE_MAPS
+  (.install (require "source-map-support")))
+
+(source-mapping-url "./trie.map")
+
+(require! R "ramda"
+          (literal create extend curry mixin) "../../lib/util.js"
+          (literal Maybe maybe either Either) "./singletons")
 
 (var traverse (R.invoker 1 "traverse"))
 
 
-(macro remember (table value ...body)
-       `(if (.has @table @value)
-            (.get @table @value)
-            (lets ((value (do ...@body)))
-                  (.set @table @value value)
-                  value)))
-
-(macro generics (label-type ...body)
-       (map body (el)
-            (var name (.pop el.contents)
-                 arg (second el.contents))
-            `(generic @name @label-type @arg ...@(.slice  el.contents 2))))
-
-
-(def fill-branch  (node k)
-  (remember node.children k (trie k )))
+(def fill-branches  (node k)
+  (remember node.children k (trie k null node)))
 
 (def safely-reduce (array f initial)
-  (.reduce seq f (Maybe.of initial)))
-(alias-macro type def-type)
+  (.reduce array
+           f
+           (Maybe.of initial)))
+
+(def postorder (pred callback)
+  (fpipe (traverse pred callback)
+         (maybe pred)
+         (map-of callback)))
 
 (var value-of (R.prop "value")
      name-of (R.prop "name")
      same-symbol-as (R.eq-props "symbol" )
-     get-from (R.invoker "get" 1)
-     map-of (R.invoker "map" 1)
+     get-from (R.invoker 1 "get" )
+     map-of (R.invoker 1 "map" )
      children-of (R.prop "children")
-     bimap-of (R.invoker "bimap" 2)
-     each (R.invoker "each" 1)
+     bimap-of (R.invoker 2 "bimap" )
+     each (R.invoker 1 "each" )
      fpipe R.pipe)
 
-(var get-child-of (R.compose get-from children-of))
+(var get-child-of (R.curry (=> ( k node) (.get node.children k))))
 (var from-children-of (map-of get-child-of))
-(def postorder (pred callback)
-  (fpipe (traverse pred callback)
-         (maybe pred)
-         (map callback)))
-(def-type Trie (init (name (value null) (parent null) (children (new Map))))
 
-  (generics (mth)
 
-            (has  (seq))
+;; The trie will be the interface which the system accesses.
+;; A trie does not manage memory, it is the memory that is to be managed.
+;; The file nodes shouldn't care at all (from the public interface) that there is a trie
+;; the trie should be a hidden detail of the file system, from the perspective of the end user.
+;;
+(def ascend (node f)
+  (f node node.name)
+  (if node.parent (ascend node.parent f)))
+(def descend (seq f node)
+  (safely-reduce seq (=> (m k) (map-of (=> (node) (f node k)) m )) node))
 
-            (find (seq)
-                  "safely locates a branch by an index sequence, returns a maybe"
-                  (safely-reduce seq from-children-of this))
+(macro  if-a (args ...body)
+        `(=> @args (if ...@body)))
 
-            (empty  () (trie null))
+(def add (a b) (+ a b))
+(def Map.prototype.each (f)
+  (.for-each this f)
+  this)
 
-            (set  (seq  value)
-                  "adds a leaf to the trie indexed by the given sequence. For every non existant branch along
+(type Trie (init (name (value null) (parent null) (children (new Map))))
+      (getter depth ()
+              (var depth 0)
+              (ascend this (=> (node) (++depth))))
+      (getter sequence ()
+              (let ((array []))
+                (ascend this (=> (node k) (.push array k) array))))
+      (getter leaf? () (not (none? this.value)))
+      (getter branch? () (none? this.value)))
+
+(var trie (create Trie))
+(export trie)
+(export Trie)
+(generics (def-method Trie)
+
+          (has  (seq) "
+Returns a boolean indicating whether or not a trie posesses a member indexed by the given key."
+                (not (not (value-of (.find this seq)))))
+
+          (find (seq) "
+safely locates a branch by an index sequence, returns a maybe"
+                (ascend seq (=> (node k) (.get node.children k))))
+
+          (empty  () (trie "" null))
+
+          (set  (seq  value (node (.reduce seq fill-branches this))) "
+adds a leaf to the trie indexed by the given sequence. For every non existant branch along
 the provided path, a new branch node will be created, until the leaf has been successfully inserted. "
-                  (lets ((node (.reduce seq fill-branches this)))
-                        (assign node.value value))))
+                     (assign node.value value))
 
-  (generics (fluent mth)
+          (map (callback children (r (trie this.name)) (depth 0))"
+Apply a function to all leaves of a tree, the structure created will be congruent to the one it was called on"
+               (var set-child-of (=> (node k value) (.set node.children k value)))
+               (.each children
+                      (=> (node)
+                          (let ((new-node (trie node.name null r)))
+                            (if node.branch?
+                                (node.map callback node.children new-node)
+                                node.leaf?
+                                (assign new-node.value (callback node.value node)))
+                            (set-child-of r node.name new-node)))) r))
+(generics (fluent def-method Trie)
 
-            (traverse (pred callback children)
-                      "visit each node of the tree, if any node matches the predicate, then execute the callback."
-                      (.each children
-                             (post-order-search
-                              pred
-                              callback)))
+          (traverse (pred callback children) "
+visit each node of the tree, if any node matches the predicate, then execute the callback."
+                    (.each children
+                           (post-order-search
+                            pred
+                            callback)))
 
-            (each  (f children)
-                   "preorder traversal of all nodes in tree."
-                   (.traverse this has-value f))))
-
-(let trie (create Trie))
-
+          (each  (callback children)
+                 "preorder traversal of all nodes in tree."
+                 (var leaf? (R.prop 'leaf?)
+                      branch? (R.prop 'branch?))
+                 (.each children
+                        (if-a (node)
+                              node.branch?
+                              (.each node callback)
+                              node.leaf?
+                              (callback node)))))
 

@@ -3,7 +3,6 @@
 
 
 ;; Creates a string that starts and ends with \"
-(docs "creates a string that starts and ends with '\"'")
 (macro wrap-in-quotes (...str) `(+ "\"" ...@str "\""))
 
 ;; I don't know if I actually use this one any where.

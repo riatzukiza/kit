@@ -14,7 +14,9 @@
 
 (const sibilant (require "sibilant"))
 
-(def-actor Transpiler (source (*cwd (process.cwd)))
+;; This is a really good example of a data oriented object I think.
+
+(def-actor Sibilant (source (*cwd (process.cwd)))
 
   (property *transpile sibilant)
 
@@ -23,7 +25,7 @@
 
   (gett js (string *cwd *transpile)
         "create a new javascript container from the transpilation of the string contained with in this sibilant container"
-        (proces.chdir *cwd)
+        (process.chdir *cwd)
         ((create Javascript )
          (pipe (.resolve Future string)
                (.then  _transpile)

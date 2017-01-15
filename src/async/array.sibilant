@@ -1,5 +1,11 @@
 (const (literal List) (require "../collection/list"))
-(print "List.bind" List.bind)
+
+(macro with-resolution-of (p args ...body)
+       `(pipe (.resolve Promise)))
+(def accumulate (result element key)
+  (with-resolution-of (callback element key) (element)
+                      (result.push element) result))
+(let bind (R.curry List.bind))
 
 (specify Future-array (extend Future-collection)
          ;; NOTE for the following two functions I would like
@@ -11,29 +17,26 @@
          ;; create a promise for the resolution of a map over
          ;; a given collection
 
-         (generic bind (mth) (callback promise)
-                  (then (.resolve Future-array promise )
-                        collection
-                        (print "collection" collection)
-                        (List.bind callback collection [])))
-         (generic map-all-serial (mth) (callback collection )
-                  (.reduce-all Future-array collection
-                               (=> (result element key)
-                                   (pipe (Promise.resolve (callback element key collection))
-                                         (then element (result.push element) result))) []))
+         (generics (mth)
+                   (bind (callback promise)
+                         "List bind for Future lists"
+                         (pipe (.resolve Future-array promise )
+                               (.then (bind callback _ []))))
+                   (map-all-serial  (callback collection )
+                                    "map over all elements of an array, enforcing order of execution"
+                                    (.reduce-all Future-array collection accumulate []))
 
-         ;; map over all values of a promised collection
-         (generic map-serial (mth) (callback promise )
-                  (.reduce Future-array (=> (result element key)
-                                         (pipe (Promise.resolve (callback element key collection))
-                                               (then element (result.push element) result)))
-                           []
-                           promise))
+                   (map-serial  (callback promise )
+                                "map over all elements of a future array, maintaining the order which they occured"
+                                (.reduce Future-array accumulate [] promise))
 
-         (gmth resolve (value )
-               ((create this) (then (.resolve Promise value) a
-                                            (Promise.all a))))
-         (generic all (mth) (array )
-                  ((create Future-array)
-                   (Promise.all array))))
+                   ( resolve (value )
+                             "specialized resolve for future arrays.
+Will resolve a promise for an array, and resolve all values of that array."
+                             ((create this)
+                              (then (.resolve Promise value) a
+                                    (Promise.all a))))
+                   ( all  (array )
+                          ((create Future-array)
+                           (Promise.all array)))))
 (assign exports.Array Future-array)
