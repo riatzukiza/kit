@@ -1,0 +1,17 @@
+(import-namespace tests)
+
+(var names []
+     name ""
+     depth 0)
+(describe Inode
+          (describe factory
+                    (does "produce an instance of Inode"
+                          (let ((i (inode ".")))
+                            (if (= i.symbol Inode.symbol) true
+                                (throw (new Error "i is not an Inode."))))))
+
+          (describe (.stat)
+                    (does  "return a promise"
+                           (pipe (inode "./src") (.stat  )))
+                    (does "that promise contain a FS.Stat object instance")
+                    (does "that stat object's is-directory method work")))

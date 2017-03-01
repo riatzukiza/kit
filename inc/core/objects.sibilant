@@ -16,7 +16,7 @@
                          "contents"))])
 
 (macro type (name ...body)
-       (let type-name name)
+       (var type-name name)
        (log-pretty "defining type" name)
        (set namespace (output-formatter (transpile name))
             (lambda (def-type name args)
@@ -48,7 +48,7 @@
            (do (assign args def-type) `((create @type-name) ...@(content-of args)))))
 
 (macro specify (name mod ...body)
-       (let type-name name)
+       (var type-name name)
        (log-pretty "defining type" name)
        (set namespace (output-formatter (transpile name))
             (lambda (def-type name args)

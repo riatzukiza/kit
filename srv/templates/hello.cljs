@@ -1,6 +1,0 @@
-(ns )
-
-[:html
- [:head]
- [:body]
- ]

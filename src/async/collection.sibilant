@@ -1,42 +1,43 @@
 (specify Future-collection (extend Future)
-         (generics (mth)
-                   (each  (callback promise)
-                         (then promise collection
-                               (.each collection callback)))
-                   (map  ( callback promise all)
-                        (then promise collection
-                              (all (.map collection callback))))
-                   (get  (key promise)
-                        (then promise future (get future key)))
-                   (set  (key value promise)
-                        (then promise future (set future key value)))
+         )
+(generics (def-method Future-collection)
+          (each  (callback promise)
+                 (then promise collection
+                       (.each collection callback)))
+          (map  ( callback promise all)
+                (then promise collection
+                      (all (.map collection callback))))
+          (get  (key promise)
+                (then promise future (get future key)))
+          (set  (key value promise)
+                (then promise future (set future key value)))
 
-                   (reduce  (callback initial-value promise )
-                           "resolves a future for a collection, when all values of the collection"
-                           (pipe (.resolve Future-collection promise)
+          (reduce  (callback initial-value promise )
+                   "resolves a future for a collection, when all values of the collection"
+                   (pipe (.resolve Future-collection promise)
 
-                                 (then collection
-                                       (.all Promise [initial-value collection]))
+                         (then collection
+                               (.all Promise [initial-value collection]))
 
-                                 (then [initial-value collection]
-                                       (.reduce collection callback initial-value))))
+                         (then [initial-value collection]
+                               (.reduce collection callback initial-value))))
 
-                   (map-all  (callback collection )
-                            "map over the resolution of all members of a collection"
-                            (.all Future-collection (.map collection callback)))
+          (map-all  (callback collection )
+                    "map over the resolution of all members of a collection"
+                    (.all Future-collection (.map collection callback)))
 
-                   (resolve  (collection (self this))
-                            "resolve a collection, and all of its members"
-                            ((create self)
-                             (.then (.resolve Promise collection) self.all)))
+          (resolve  (collection (self this))
+                    "resolve a collection, and all of its members"
+                    ((create self)
+                     (.then (.resolve Promise collection) self.all)))
 
-                   (reduce-all  (callback init collection)
-                                "given a collection, return a promise for its reduction."
-                                (.reduce collection
-                                         (=> (promise x k)
-                                             (then promise result
-                                                   (callback result x k collection)))
-                                         (.resolve Promise (or init null))))))
+          (reduce-all  (callback init collection)
+                       "given a collection, return a promise for its reduction."
+                       (.reduce collection
+                                (=> (promise x k)
+                                    (then promise result
+                                          (callback result x k collection)))
+                                (.resolve Promise (or init null)))))
 
 (assign exports.Collection Future-collection)
 

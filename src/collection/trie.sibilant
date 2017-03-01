@@ -1,6 +1,28 @@
-(include "./macros")
+(include "../../inc/macros")
 (import-namespace kit)
 
+(macro remember (table value ...body)
+       `(if (.has @table @value)
+            (.get @table @value)
+            (let ((value (scoped ...@body)))
+                  (.set @table @value value)
+                  value)))
+(macro let (args ...body)
+       `((lambda (...@(.map args.contents (=> (el) (first el.contents))))
+           ...@body) ...@(.map args.contents (=> (el) (second el.contents)))) )
+
+(macro generics (namer ...body)
+       (.map body
+             (=> (el)
+                 `(generic @(first el.contents)
+                           @namer ...@(rest el.contents)))))
+
+(macro def-method (type-name method-name args ...body)
+       `(set @type-name
+             (quote @method-name)
+             (lambda @args ...@body)))
+(macro fluent (def name args ...body)
+       `(@def @name @args ...@body this))
 (unless process.env.DISABLE_SOURCE_MAPS
   (.install (require "source-map-support")))
 
@@ -11,6 +33,7 @@
           (literal Maybe maybe either Either) "./singletons")
 
 (var traverse (R.invoker 1 "traverse"))
+
 
 
 (def fill-branches  (node k)
@@ -109,8 +132,8 @@ visit each node of the tree, if any node matches the predicate, then execute the
                             pred
                             callback)))
 
-          (each  (callback children)
-                 "preorder traversal of all nodes in tree."
+          (each  (callback children) "
+preorder traversal of all nodes in tree."
                  (var leaf? (R.prop 'leaf?)
                       branch? (R.prop 'branch?))
                  (.each children

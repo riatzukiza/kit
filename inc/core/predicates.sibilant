@@ -1,5 +1,5 @@
 ;;(namespace predicates)
-
+(namespace kit)
 (macro expression? (e);;expressions are "()"
        `(= (get @e 'type) "expression"))
 

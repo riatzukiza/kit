@@ -1,12 +1,7 @@
-
-
-(include "../../deps")
-
-(import-namespace defs)
-(import-namespace js)
-
-(const (literal create extend mixin) (require "../util"))
-
+(include "../../inc/macros")
+(import-namespace kit)
+(require! {Event-emitter} "events"
+          {create extend mixin}  "../../lib/util")
 (const Node-promise Promise)
 
 

@@ -1,9 +1,0 @@
-(include "./inc/macros.sibilant")
-(import-namespace kit)
-(require! {Trie trie}"./src/collection/trie"
-          {Maybe maybe Either either} "./src/collection/singletons"
-          {Inode inode} "./src/file-system")
-(let ((src (inode "./src")))
-  (.on inode.event 'stat (aprint "evented stats"))
-  (.stat inode (aprint "stats")))
-

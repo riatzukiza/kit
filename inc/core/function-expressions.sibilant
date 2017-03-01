@@ -14,7 +14,7 @@
 
 ;; Define a named function that returns a promise.
 (macro def-promised (name args ...body)
-       `(function @name @args (make-promise ...@body)))
+       `(def @name @args (make-promise ...@body)))
 
 ;; arrow thunk.
 (macro assignment! (name value) [ name " = " value])

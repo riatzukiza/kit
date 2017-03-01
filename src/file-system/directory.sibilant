@@ -1,10 +1,11 @@
-(def-type Directory (init (path inode (event inode.event)))
-
+(type Directory (init (path inode (event inode.event))) 
   (gett path (inode) inode.path)
   (gett keys (path) (.resolve Future.Array (readdir path)))
 
-  (remember-map-from keys children (key) (.get this key))
-  (generics (evented mth)
+  (remember-map-from keys children (key) (.get this key)))
+
+(let directory (create Directory))
+(generics (evented def-method Directory)
 
             ( make  ( inode (path inode.path))
                     "given an inode, extract a path from the inode and create a directory at this location. Will return as failed
@@ -26,9 +27,7 @@ if the call to `mkdir` fails. Call this instead of make if you expect there may 
 
             ( delete  (inode (path inode.path))
                       "Simply destroy the directory indexed by the inode given."
-                      (rmdir path))))
-
-(let directory (create Directory))
+                      (rmdir path)))
 
 (comment (let d ((create Directory)))
          ;;creates an instance of d

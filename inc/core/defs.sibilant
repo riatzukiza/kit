@@ -48,7 +48,9 @@
 
 (macro not-implemented (args ) `(# @args (throw (new Error "not implemented"))))
 
-(macro >> (f ...args) `(.bind @f this ...@args))
+(macro >> (obj f ...args) `(.bind @f @obj ...@args))
+
+(>> this (# (a b c) (foo this)))
 
 (macro += (handle value) [handle " += " value])
 
@@ -95,7 +97,6 @@
                          (.map (lambda (pair)  [(first pair) " = " (second pair)]))
 
                          (interleave ",\n    ")) ]))
-(macro let (...rest) `(assignment let ...@rest))
 ;;(comment "////////////////////////////////////////////////////////////////////////////////////////")
 
 (macro comma (...opts)

@@ -1,24 +1,45 @@
-(type Future
+(include "../../inc/macros")
+(import-namespace kit)
+(require! {Event-emitter} "events"
+          {create extend mixin}  "../../lib/util")
+(const Node-promise Promise)
 
-      ( init (value))
-      (generics (mth)
-                (resolve (value )
-                 ((create this) (.resolve Promise value)))
 
-                (map (f) (.then this f))
+(macro node-back (args ...body)
+       (print "hi")
+       `(=> (err ...@(get args "contents"))
+            (if err (fail err) ...@body)))
 
-                (then (on-success on-fail)
-                      (future (.then this.promise
-                                     on-success
-                                     on-fail)))
+(macro proxy (name property)
+       `(mth @name ((dots args))
+             ((get this (quote @property) @name) (dots args))))
+(type Future ( init (value)))
 
-                (catch (on-fail) (.catch this.promise on-fail))
+(macro def-generic (name args ...body)
+       `(generic @name (def) @args ...@body))
 
-                (lift (f)
-                      (=> ((dots args))
-                          ((create this)
-                           (make-promise (f (dots args)
-                                            (node-back (value) (success value)))))))))
-(let future (create Future))
+(def-generic Future.resolve (value )
+  ((create this) (.resolve Promise value)))
+
+(def Future.map (f)
+  (.then this f))
+
+(def-generic Future.then (on-success on-fail promise)
+  "A simple wrapper for the `then` method of an arbitrary promise."
+  (.then promise
+         on-success
+         on-fail))
+
+(def-generic Future.catch (on-fail promise)
+  "A simple wrapper for the catch method on the promise contained by this future."
+  (.catch promise on-fail))
+
+(def-generic Future.lift (f)
+  "create a function from a node error back style callback function that will return a promise for its success"
+  (=> ((dots args))
+      ((create this)
+       (make-promise (f (dots args)
+                        (node-back (value) (success value)))))))
+(var future (create Future))
 
 (export Future)

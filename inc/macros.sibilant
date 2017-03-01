@@ -1,8 +1,29 @@
 (include
- "./predicates"
- "./function-expressions"
- "./defs"
+ "./core/predicates"
+ "./core/function-expressions"
+ "./core/defs"
  "./console"
- "./objects"
- "./events"
+ "./core/objects.sibilant"
+ "./async/events"
  )
+
+(macro remember (table value ...body)
+       `(if (.has @table @value)
+            (.get @table @value)
+            (let ((value (scoped ...@body)))
+              (.set @table @value value)
+              value)))
+(macro let (args ...body)
+       `((lambda (...@(.map args.contents (=> (el) (first el.contents))))
+           ...@body) ...@(.map args.contents (=> (el) (second el.contents)))) )
+
+(macro generics (namer ...body)
+       (.map body
+             (=> (el)
+                 `(generic @(first el.contents)
+                           @namer ...@(rest el.contents)))))
+
+(macro def-method (type-name method-name args ...body)
+       `(set @type-name
+             (quote @method-name)
+             (lambda @args ...@body)))
