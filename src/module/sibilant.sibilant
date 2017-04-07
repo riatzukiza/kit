@@ -16,20 +16,20 @@
 
 ;; This is a really good example of a data oriented object I think.
 
-(def-actor Sibilant (source (*cwd (process.cwd)))
+(type Sibilant (source (*cwd (process.cwd)))
 
-  (property *transpile sibilant)
+      (property *transpile sibilant)
 
-  (proxy-from source string )
-  (gett ast (*transpile source) (*transpile source.string))
+      (proxy-from source string )
+      (gett ast (*transpile source) (*transpile source.string))
 
-  (gett js (string *cwd *transpile)
-        "create a new javascript container from the transpilation of the string contained with in this sibilant container"
-        (process.chdir *cwd)
-        ((create Javascript )
-         (pipe (.resolve Future string)
-               (.then  _transpile)
-               (then s s.js)))))
+      (gett js (string *cwd *transpile)
+            "create a new javascript container from the transpilation of the string contained with in this sibilant container"
+            (process.chdir *cwd)
+            ((create Javascript )
+             (pipe (.resolve Future string)
+                   (.then  _transpile)
+                   (then s s.js)))))
 
 
 (export Sibilant)

@@ -1,1 +1,71 @@
 (include "./inc/macros")
+
+(meta
+
+(macro transpile-name (name) `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
+
+(macro describe (name ...body)
+       `(mixin (lit ...@body) @name))
+
+(macro def-lit-macro (name args ...body)
+
+       (assign name (transpile-name `(@ name)))
+
+       (var t (pipe  `(lambda @args ...@body)
+                     transpile
+                     output-formatter)
+            )
+       (print "def-lit-maco fail!" t)
+       (set lit-macros name (eval t))
+
+       null
+
+       )
+(macro lit (...body)
+       `(literal
+         ...@(.map body global.lit-macros )
+         )
+       )
+
+(def global.lit-macros (el)
+
+  (print el)
+
+
+  (if (expression? el)
+
+      (do (var name (transpile-name el))
+
+          (print "it was an expression" name lit-macros)
+          (if (and (literal? (first el.contents))
+                   (has-key? lit-macros name))
+
+              ((get lit-macros name) (dots (rest (content-of el))))
+
+              `(property ...@(content-of el))))
+
+      el
+      ))
+
+(def lit-macros.init (args ...body)
+  `(init @args ...@body))
+
+(def lit-macros.gett (name ...body)
+  `(gett @name ...@body))
+
+(def lit-macros.alias (name from)
+  `(alias @name @from))
+
+(def lit-macros.sett (name value-name ...body)
+  `(sett @name @value-name ...@body))
+
+
+
+ )
+
+(def-lit-macro gmth (name args ...body)
+  `(generic @name (mth) @args ...@body))
+(def-lit-macro mth (name args ...body)
+  `(mth @name @args ...@body))
+
+

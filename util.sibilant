@@ -1,7 +1,6 @@
 (include "./macros")
 (import-namespace kit)
 
-(require! (literal create extend mixin) "../util")
 
 (def either (left right value)
   (if value (left value) (right value)))

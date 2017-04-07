@@ -31,7 +31,7 @@
                   (do (assign args def-type)
                       `((create @type-name) ...@(content-of args))))))
 
-       `(var @name (literal (property symbol (Symbol (quote @name))) ...@body)))
+       `(const @name (literal (property symbol (Symbol (quote @name))) ...@body)))
 
 (macro set-macro (name args ...body)
        `(set sibilant.macros.namespace (output-formatter (transpile @name))
