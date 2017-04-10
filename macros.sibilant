@@ -1,6 +1,9 @@
 (include "./inc/macros")
 
 (meta
+ (def transpile.string (node)
+   (pipe node.token
+         (.replace (regex "(\\r\\n|\\n|\\r)" 'gm) "\"+\"")))
 
 (macro transpile-name (name) `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
 
