@@ -5,6 +5,9 @@
        `(console.log ...@args))
 
 ;; asyncronous printing utility
+
 (macro aprint (...a)
-       '(=> ((rest-param b))
-         (console.log ...@(spread-op a) (spread-op b))))
+       '(lambda (b (dots others))
+         (console.log ...@a b (dots others))
+         b
+         ))

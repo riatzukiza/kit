@@ -8,7 +8,15 @@
 ;; ES6 style arrow function.
 
 (macro => (args ...body)
-       ["(" ...(interleave ", "args.contents) ") => {\n\t"  (indent (apply ^do body)) "\n}"])
+
+       [
+       "(" ...(interleave ", " args.contents) ") => {\n\t"
+
+       (indent (apply ^do body))
+
+       "\n}"
+       ])
+
 
 (macro functor (obj method args ...body) `(@method @obj (=> @args ...@body)))
 
