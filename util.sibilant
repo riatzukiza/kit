@@ -17,9 +17,12 @@
       value))
 
 (def cond (pred action (dots rest))
-  "A lazy application of a functional conditional operator.
-Waits for a value to be given to it before applying its functional arguements"
+  "A lazy application of a functional conditional operator. Waits for a value to be given to it before applying its functional arguements"
   (=> (value) (conditional value pred action (dots rest))))
+
+(def partially-apply-after (f (dots args))
+  (lambda ((dots rest-args))
+    (f (dots rest-args) (dots args))))
 
 
 
