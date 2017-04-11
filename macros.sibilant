@@ -3,7 +3,7 @@
 (meta
  (def transpile.string (node)
    (pipe node.token
-         (.replace (regex "(\\r\\n|\\n|\\r)" 'gm) "\"+\"")))
+         (.replace (regex "(\\r\\n|\\n|\\r)" 'gm) "\\n\"+\"")))
 
 (macro transpile-name (name) `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
 
@@ -16,39 +16,26 @@
 
        (var t (pipe  `(lambda @args ...@body)
                      transpile
-                     output-formatter)
-            )
-       (print "def-lit-maco fail!" t)
+                     output-formatter))
+
        (set lit-macros name (eval t))
 
-       null
-
-       )
-(macro lit (...body)
-       `(literal
-         ...@(.map body global.lit-macros )
-         )
-       )
+       null)
+(macro lit (...body) `(literal ...@(.map body global.lit-macros )))
 
 (def global.lit-macros (el)
-
-  (print el)
 
 
   (if (expression? el)
 
       (do (var name (transpile-name el))
 
-          (print "it was an expression" name lit-macros)
           (if (and (literal? (first el.contents))
                    (has-key? lit-macros name))
 
               ((get lit-macros name) (dots (rest (content-of el))))
 
-              `(property ...@(content-of el))))
-
-      el
-      ))
+              `(property ...@(content-of el)))) el))
 
 (def lit-macros.init (args ...body)
   `(init @args ...@body))
@@ -71,4 +58,8 @@
 (def-lit-macro mth (name args ...body)
   `(mth @name @args ...@body))
 
+(def-lit-macro def (name args ...body)
+  `(mth @name @args ...@body))
 
+(def-lit-macro def-generic (name args ...body)
+  `(gmth @name @args ...@body))
