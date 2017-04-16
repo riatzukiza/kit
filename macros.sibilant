@@ -1,5 +1,6 @@
 (include "./inc/macros")
-
+(macro def-curried (name args ...body)
+       `(var @name (R.curry (=> @args ...@body))))
 (meta
  (def transpile.string (node)
    (pipe node.token
@@ -63,3 +64,5 @@
 
 (def-lit-macro def-generic (name args ...body)
   `(gmth @name @args ...@body))
+
+

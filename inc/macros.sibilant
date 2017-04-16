@@ -27,3 +27,5 @@
        `(set @type-name
              (quote @method-name)
              (lambda @args ...@body)))
+(macro def-curried (name args ...body)
+       `(var @name (R.curry (=> @args ...@body))))
