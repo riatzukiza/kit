@@ -1,5 +1,6 @@
 (include "./macros")
 (import-namespace kit)
+(require! R "ramda" )
 
 
 (def either (left right value)
