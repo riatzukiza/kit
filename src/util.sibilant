@@ -1,0 +1,67 @@
+(include "../macros")
+(import-namespace kit)
+
+(require! R "ramda" util "../js/andy-util.js")
+
+(var mixin util.mixin)
+(mixin util exports )
+
+
+(def either (left right value)
+  (if value (left value) (right value)))
+
+(export either)
+
+(def conditional (value pred action (dots rest))
+  "A functional conditional operator. Immediately evaluates its arguements."
+  (if action
+      (if (pred value) (action value)
+
+          (conditional value (dots rest)))
+
+      pred (pred value)
+
+      value))
+
+(export conditional)
+
+(def cond (pred action (dots rest))
+  "A lazy application of a functional conditional operator. Waits for a value to be given to it before applying its functional arguements"
+  (=> (value) (conditional value pred action (dots rest))))
+(export cond)
+
+(def partially-apply-after (f (dots args))
+  "partially apply a function with the rest of the arguements to this function being appended to the end of the arguements of the given function"
+  (lambda ((dots rest-args))
+    (f (dots rest-args) (dots args))))
+
+(export partially-apply-after)
+
+
+
+(def-generic Object.prototype.keys ((object this))
+  (Object.keys object))
+
+(def-generic Object.prototype.each (f (object this))
+
+  (each (object.keys) (k i) (f (get object k) k object))
+
+  object)
+(def-generic Array.prototype.each (f (array this))
+  (.for-each array f)
+  this)
+
+
+(def-generic Object.prototype.merge (subject (target this))
+  "merge the given object with this one. Does not create a new object."
+  (each subject (value key)
+        (comment "thing")
+        (set target key value)) target)
+
+
+
+(def identity (a) a)
+
+(def-curried set-value (v o) (assign o.value v))
+
+(def-curried reduce-promise (f a) (.reduce a f [(Promise.resolve) ""]))
