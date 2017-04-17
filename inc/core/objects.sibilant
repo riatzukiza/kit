@@ -1,3 +1,4 @@
+
 (macro define-hidden-method (obj name args ...body)
        `(Object.define-property
          @obj
@@ -66,6 +67,13 @@
        `(var @name (...@(content-of mod)
                          (literal (property symbol (Symbol (quote @name))) ...@body))))
 
+
+(macro gett (name ...body)
+       ["get " `(mth @name () ...@body)])
+
+(macro sett (name val ...body)
+
+       ["set " `(mth @name (@val) ...@body)])
 
 (macro init (args ...body)
        `(generic init (mth)  @args

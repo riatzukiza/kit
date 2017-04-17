@@ -53,6 +53,9 @@
          (.for-each array f)
          this)
 
+(def Map.prototype.each (f)
+  (.for-each this f)
+  this)
 
 (generic Object.prototype.merge (def)
          (subject (target this))
