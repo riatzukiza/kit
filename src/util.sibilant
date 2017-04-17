@@ -39,29 +39,24 @@
 
 
 
-(def-generic Object.prototype.keys ((object this))
-  (Object.keys object))
+(generic Object.prototype.keys (def)
+         ((object this))
+         (Object.keys object))
 
-(def-generic Object.prototype.each (f (object this))
+(generic Object.prototype.each (def)
+         (f (object this))
 
-  (each (object.keys) (k i) (f (get object k) k object))
+         (each (object.keys) (k i) (f (get object k) k object))
 
-  object)
-(def-generic Array.prototype.each (f (array this))
-  (.for-each array f)
-  this)
-
-
-(def-generic Object.prototype.merge (subject (target this))
-  "merge the given object with this one. Does not create a new object."
-  (each subject (value key)
-        (comment "thing")
-        (set target key value)) target)
+         object)
+(generic Array.prototype.each (def) (f (array this))
+         (.for-each array f)
+         this)
 
 
+(generic Object.prototype.merge (def)
+         (subject (target this))
 
-(def identity (a) a)
-
-(def-curried set-value (v o) (assign o.value v))
-
-(def-curried reduce-promise (f a) (.reduce a f [(Promise.resolve) ""]))
+         (each subject (value key)
+               (comment "thing")
+               (set target key value)) target)
