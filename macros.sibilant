@@ -1,3 +1,4 @@
+(namespace kit )
 (include "./inc/macros")
 (macro def-curried (name args ...body)
        `(var @name (R.curry (=> @args ...@body))))
