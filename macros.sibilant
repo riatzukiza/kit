@@ -72,3 +72,19 @@
 
 (def-lit-macro sett (...body)
   `(sett ...@body))
+(macro def-description (name args ...body)
+       "define a type and describe it in a function like syntax. The arguements body is passed to the last instance of the init macro as its argument body."
+
+       (def init-expression? (e) (and (expression? e) (= (get (first e.contents) 'token)  'init)))
+       (def describer? (e) (not (init-expression? e)))
+
+       (var init-form (pipe body (.filter  init-expression?)
+                            last
+                            ))
+       (var init-body (ternary init-form (rest init-form.contents) []))
+
+       (var description [ `(init @args ...@init-body)...(pipe body (.filter  describer?))])
+
+       (if (dotted? name)
+           `(set Descriptions (quote @name) (mixin (lit ...@description) @name  ))
+           `(set Descriptions (quote @name) (mixin (lit ...@description) @name  ))))
