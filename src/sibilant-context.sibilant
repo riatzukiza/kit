@@ -47,6 +47,8 @@
       eval-file
       eval-stream
       )
+(export Sibilant-context)
+(mixin Sibilant-context export)
 
 (assign context.Sibilant-context Sibilant-context)
 
