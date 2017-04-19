@@ -9,8 +9,8 @@
   (set module 'filename (pipe (process.cwd) (concat "/exec")))
   (set context
        '*sibilant sibilant
-       'module  module
-       'require require
+       ;;'module  module
+       ;;'require require
        'context context)
   (each-key key global (set context key (get global key)))
   (each-key key obj (set context key (get obj key)))
