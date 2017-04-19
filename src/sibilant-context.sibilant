@@ -15,6 +15,7 @@
   (each-key key global (set context key (get global key)))
   (each-key key obj (set context key (get obj key)))
   context)
+(export create-context)
 
 (var context (create-context))
 
@@ -40,6 +41,9 @@
 (def-generic eval-stream ())
 
 (type Sibilant-context
+
+      (init ((*context (create-context))))
+
       (property name "kit")
       (property *context context)
       (property *sibilant sibilant)
