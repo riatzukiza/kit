@@ -1,6 +1,6 @@
 (require! 'vm 'sibilant)
 (def-generic create-context ((obj {}))
-  (var context (vm.create-context obj "name"))
+  (var context (vm.create-context {} "name"))
   (set context
        '*sibilant sibilant
        'module  module
