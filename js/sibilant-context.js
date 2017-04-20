@@ -8,6 +8,20 @@
 
 
 ;
+var vm = require("vm"),
+    sibilant = require("sibilant");
+defGeneric(createContext, obj({  })(), var context = vm.createContext({  }, "name");, context._sibilant = sibilant;
+context.module = module;
+context.require = require;
+context.context = context;, Object.keys(global).forEach((function(key) {
+  /* inc/vm.sibilant:9:2 */
+
+  return context[key] = global[key];
+})), Object.keys(obj).forEach((function(key) {
+  /* inc/vm.sibilant:10:2 */
+
+  return context[key] = obj[key];
+})), context);
 var sibilant = require("sibilant"),
     vm = require("vm"),
     fs = require("fs"),
@@ -17,20 +31,10 @@ var sibilant = require("sibilant"),
   partiallyApplyAfter,
   mixin
  } = require("./util.sibilant");
-defGeneric(createContext, obj({  })(), var context = vm.createContext("name");, context._sibilant = sibilant;
-context.context = context;, Object.keys(global).forEach((function(key) {
-  /* src/sibilant-context.sibilant:14:2 */
-
-  return context[key] = global[key];
-})), Object.keys(obj).forEach((function(key) {
-  /* src/sibilant-context.sibilant:15:2 */
-
-  return context[key] = obj[key];
-})), context);
 exports.createContext = createContext;
 var context = createContext();
 var plift = (function plift$(f) {
-  /* plift src/sibilant-context.sibilant:21:0 */
+  /* plift src/sibilant-context.sibilant:13:0 */
 
   return (...args) => {
   	
