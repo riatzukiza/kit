@@ -1,0 +1,11 @@
+(require! 'vm)
+(def-generic create-context ((obj {}))
+  (var context (vm.create-context obj "name"))
+  (set context
+       '*sibilant sibilant
+       'module  module
+       'require require
+       'context context)
+  (each-key key global (set context key (get global key)))
+  (each-key key obj (set context key (get obj key)))
+  context)

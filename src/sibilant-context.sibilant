@@ -1,19 +1,11 @@
 (include "../macros.sibilant")
 (import-namespace kit)
+(include "../inc/vm")
 
 (require! 'sibilant 'vm 'fs
           (lit create extend partially-apply-after mixin ) "./util.sibilant" )
 
-(def-generic create-context ((obj {}))
-  (var context (vm.create-context obj "name"))
-  (set context
-       '*sibilant sibilant
-       'module  module
-       'require require
-       'context context)
-  (each-key key global (set context key (get global key)))
-  (each-key key obj (set context key (get obj key)))
-  context)
+
 (export create-context)
 
 (var context (create-context))
