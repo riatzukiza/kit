@@ -1,3 +1,4 @@
+(import-namespace kit)
 (require! 'vm 'sibilant)
 (def-generic create-context ((obj {}))
   (var context (vm.create-context {} "name"))
