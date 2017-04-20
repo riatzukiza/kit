@@ -1,0 +1,6 @@
+(defun )
+(async-shell-command "sibilant" "*Sibilant*")
+(process-send-string "*Sibilant*" "(console.log \"hi\")")
+(process-send-string "*Sibilant*" "\n")
+(buffer-string)
+(asso "header.sibilant")

@@ -1,0 +1,26 @@
+(include "../file-system/index")
+
+(import-namespace filesystem)
+
+(include "./header.sibilant")
+
+(type Sibilant-file)
+
+(def-description Sibilant-file (path fs)
+  (gett file (.find this.fs this.path))
+
+  (def-generic compile ( target path)
+    (compile path target))
+  (def-generic eval (path)
+    (eval-string path )))
+
+(def-description Javascript-file (path fs)
+  (def-generic eval (path)))
+
+(def compile (path target)
+  (shell (sibilant [path "-o" target])))
+(var project {})
+(describe project
+          (fs ((create File-system)))
+
+          )

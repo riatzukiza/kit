@@ -54,6 +54,3 @@
   (git commit "-m" (+ "compiled " path))
   (git checkout  [branch-name])))
 
-(pipe (shell (ls ".")
-             (ls "-gl"))
-      (.then (aprint "ls")))

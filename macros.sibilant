@@ -89,3 +89,8 @@
        (if (dotted? name)
            `(set Descriptions (quote @name) (mixin (lit ...@description) @name  ))
            `(set Descriptions (quote @name) (mixin (lit ...@description) @name  ))))
+
+(macro chain-promise (p ...rest)
+       (if (empty? rest)
+           p
+           `(then-do @p (chain-promise ...@rest))))

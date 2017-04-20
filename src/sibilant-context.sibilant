@@ -5,12 +5,11 @@
           (lit create extend partially-apply-after mixin ) "./util.sibilant" )
 
 (def-generic create-context ((obj {}))
-  (var context (vm.create-context))
-  (set module 'filename (pipe (process.cwd) (concat "/exec")))
+  (var context (vm.create-context "name"))
   (set context
        '*sibilant sibilant
-       ;;'module  module
-       ;;'require require
+       'module  module
+       'require require
        'context context)
   (each-key key global (set context key (get global key)))
   (each-key key obj (set context key (get obj key)))
@@ -20,7 +19,6 @@
 (var context (create-context))
 
 (def plift (f)
-  (print "lifting" f)
   (promised ((dots args)) (apply f [ (dots args) (=> (err data) (if err (reject err) (resolve data))) ])))
 
 (var read-file (plift fs.read-file))
