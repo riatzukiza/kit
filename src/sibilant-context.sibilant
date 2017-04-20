@@ -5,7 +5,7 @@
           (lit create extend partially-apply-after mixin ) "./util.sibilant" )
 
 (def-generic create-context ((obj {}))
-  (var context (vm.create-context "name"))
+  (var context (vm.create-context obj "name"))
   (set context
        '*sibilant sibilant
        'module  module
