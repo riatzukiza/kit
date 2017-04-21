@@ -29,3 +29,12 @@
              (lambda @args ...@body)))
 (macro def-curried (name args ...body)
        `(var @name (R.curry (=> @args ...@body))))
+
+(alias-macro def-description *def-description)
+
+
+
+;; (macro def-description (name args ...body)
+;;        `(var @name (register-description (quote @name)
+;;                                          (lit ...@body))))
+
