@@ -31,4 +31,5 @@ Locate the index of an element with an offset, and a limit on width and height.
   (.set this.*matrix (+ x offx) (+ y offy) value))
 
 (var matrix-view (create Matrix-view))
+(export Matrix-view)
 (export matrix-view)
