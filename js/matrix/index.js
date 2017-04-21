@@ -14,7 +14,7 @@ var {
   extend,
   partiallyApplyAfter,
   mixin
- } = require("../util.sibilant");
+ } = require("../util");
 var Matrix = {  };
 mixin({ 
   init( width = this.width,height = this.height,array = [] ){ 

@@ -38,8 +38,8 @@
 (var project-path "~/devel/groups/liveedu/city-builder-tutorial/sessions/04-random-walks")
 
 
-(chain-promise ;;(update-git "~/devel/groups/mine/kit")
-               ;;(update-npm project-path)
+(chain-promise (update-git "~/devel/groups/mine/kit")
+               (update-npm project-path)
 
                (.then (compile-sib ".")
                       (aprint "done compiling"))
