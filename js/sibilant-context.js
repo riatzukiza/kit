@@ -8,20 +8,29 @@
 
 
 ;
+var R = require("ramda");
 var vm = require("vm"),
     sibilant = require("sibilant");
-defGeneric(createContext, obj({  })(), var context = vm.createContext({  }, "name");, context._sibilant = sibilant;
-context.module = module;
-context.require = require;
-context.context = context;, Object.keys(global).forEach((function(key) {
-  /* inc/vm.sibilant:9:2 */
+var createContext = (function createContext$(obj = {  }) {
+  /* create-context inc/core/function-expressions.sibilant:32:8 */
 
-  return context[key] = global[key];
-})), Object.keys(obj).forEach((function(key) {
-  /* inc/vm.sibilant:10:2 */
-
-  return context[key] = obj[key];
-})), context);
+  var context = vm.createContext({  }, "name");
+  context._sibilant = sibilant;
+  context.module = module;
+  context.require = require;
+  context.context = context;
+  Object.keys(global).forEach((function(key) {
+    /* inc/vm.sibilant:10:2 */
+  
+    return context[key] = global[key];
+  }));
+  Object.keys(obj).forEach((function(key) {
+    /* inc/vm.sibilant:11:2 */
+  
+    return context[key] = obj[key];
+  }));
+  return context;
+});
 var sibilant = require("sibilant"),
     vm = require("vm"),
     fs = require("fs"),
@@ -34,7 +43,7 @@ var sibilant = require("sibilant"),
 exports.createContext = createContext;
 var context = createContext();
 var plift = (function plift$(f) {
-  /* plift src/sibilant-context.sibilant:13:0 */
+  /* plift sib/sibilant-context.sibilant:13:0 */
 
   return (...args) => {
   	
@@ -76,9 +85,17 @@ var evalFile = (function evalFile$(path = this.path, _context = this._context, n
   
   }));
 });
-defGeneric(evalString, sibilantString(_context, name), vm.runInContext(sibilant(sibilantString).js, _context, name));
-defGeneric(evalStream, null);
-const SibilantContext = { 
+var evalString = (function evalString$(sibilantString = this.sibilantString, _context = this._context, name = this.name) {
+  /* eval-string inc/core/function-expressions.sibilant:32:8 */
+
+  return vm.runInContext(sibilant(sibilantString).js, _context, name);
+});
+var evalStream = (function evalStream$() {
+  /* eval-stream inc/core/function-expressions.sibilant:32:8 */
+
+  
+});
+const SibilantContext={ 
   symbol:Symbol("SibilantContext"),
   init( _context = createContext() ){ 
     
