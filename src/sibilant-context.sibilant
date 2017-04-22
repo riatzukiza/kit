@@ -3,7 +3,7 @@
 (include "../inc/vm")
 
 (require! 'sibilant 'vm 'fs
-          (lit create extend partially-apply-after mixin ) "./util.sibilant" )
+          (lit create extend partially-apply-after mixin ) "../js/util" )
 
 
 (export create-context)
