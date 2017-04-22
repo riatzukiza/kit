@@ -1,7 +1,7 @@
-(include "../file-system/index")
+(include "./macros.sibilant")
+(import-namespace kit)
 
-(import-namespace filesystem)
-
+(var testing? true)
 ;;(include "./header.sibilant")
 
 (var Descriptions {})
@@ -11,6 +11,9 @@
 (macro dotted? (token) `(= (get @token "type") "dots"))
 
 (require! (lit create extend mixin cond partially-apply-after ) "./js/util"
+
+          (lit File-system) "file-system"
+          Path 'path
           )
 
 (type Sibilant-file)
@@ -29,19 +32,44 @@
 (def compile (path target)
   (shell (sibilant [path "-o" target])))
 
-(def promise-all-calls ( method obj (dots args))
+(def promise-all-calls (obj method  (dots args))
   (.all Promise (.map args (=> (a) (.apply (get obj method) obj a)))))
 
-(type Project )
+(type Project-file-system )
 
-(def-describe Project-file-system (root (fs ((create File-system) root)))
-  (def-generic find (path fs)
-    (promise-all-calls 'find fs
-                       (Path.join "sib" (+ path ".sibilant"))
-                       (Path.join "js" (+ path ".js"))))
+(def promise-project-pair (m fs path)
+
+  (promise-all-calls m fs
+                     [ (Path.join "sib" (+ path ".sibilant")) ]
+                     [ (Path.join "js" (+ path ".js")) ]))
+
+(def sibilant-path (path) (Path.join "sib" (+ path ".sibilant")))
+(def js-path (path) (Path.join "js" (+ path ".js")))
+
+(type Project-pair)
+(def-description Project-pair (pair)
+  (gett js (second this.pair))
+  (gett sib (first this.pair))
+
+  (def-generic compile ())
+  (def-generic require ())
+  (def-generic include ())
+  (def-generic eval ()))
+
+(def-description Project-file-system (root (*tree ((create Tree-map))) (fs ((create File-system) root)))
+
+  (def-generic find (path fs *tree)
+    (pipe (promise-all-calls 'find  [ (sibilant-path path) ] [ (js-path path) ])
+          (.then (create Project-pair))))
 
   (def insert ())
-  (def watch ())
+  (def watch ()
+    (pipe fs
+          (promise-all-calls
+           'watch
+           [ (Path.join "sib" (+ path ".sibilant")) ]
+           [ (Path.join "js" (+ path ".js")) ])
+          (then )))
   (def set ()))
 
 (var project ((create Project-file-system) "."))

@@ -1,0 +1,32 @@
+(include "../macros/macros")
+(import-namespace kit)
+(def conditional (value pred action (dots rest))
+  "A functional conditional operator. Immediately evaluates its arguements."
+  (if action
+      (if (pred value) (action value)
+
+          (conditional value (dots rest)))
+
+      pred (pred value)
+
+      value))
+(export conditional)
+
+(def cond (pred action (dots rest))
+  "A lazy application of a functional conditional operator.
+Waits for a value to be given to it before applying its functional arguements"
+  (=> (value) (conditional value pred action (dots rest))))
+(export cond)
+
+(curried Maybe (t f value)
+         (if (t value)
+             (f value)))
+(curried Either (t u f g value)
+         (if (t value)
+             (f value)
+             (u value)
+             (g value)))
+(let Int (=> (n) (if (Number.is-integer n) n false)))
+(let Char (=> (s) (if (and (string? s) (= 1 s.length))
+                      s false)))
+(let f (Either Int Char show list))

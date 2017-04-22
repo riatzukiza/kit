@@ -1,0 +1,22 @@
+(import-namespace tests)
+(describe Future
+          (describe factory
+                    (accepts any)
+                    (returns (an Inode)))
+
+          (describe (.then)
+                    (accepts (function (maybe function)))
+                    (it "will resolve successful if no errors are thrown")
+                    (returns Future))
+
+          (describe (.catch)
+                    (accepts  function)
+                    (returns  Future))
+
+          (describe (.resolve)
+                    (accepts any)
+                    (returns  Future))
+
+          (describe (.lift)
+                    (accepts  continuation)
+                    (returns  (unary function))))

@@ -1,0 +1,6 @@
+(namespace filesystem)
+(include "kit/macros")
+
+(import-namespace kit)
+
+(include "./sibilant/index.sibilant")
