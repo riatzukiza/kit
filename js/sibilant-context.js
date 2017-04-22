@@ -39,7 +39,7 @@ var sibilant = require("sibilant"),
   extend,
   partiallyApplyAfter,
   mixin
- } = require("./util.sibilant");
+ } = require("../js/util");
 exports.createContext = createContext;
 var context = createContext();
 var plift = (function plift$(f) {
