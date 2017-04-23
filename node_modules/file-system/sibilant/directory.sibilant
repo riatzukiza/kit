@@ -1,5 +1,5 @@
 
-(specify Directory (extend Event-emitter.prototype))
+(specify Directory (extend FS-node))
 
 (describe Directory
 

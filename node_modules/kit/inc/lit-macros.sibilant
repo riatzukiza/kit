@@ -1,0 +1,22 @@
+
+(macro def-generic (name args ...body)
+       `(generic @name (def) @args ...@body))
+
+
+(def-lit-macro gmth (name args ...body)
+  `(generic @name (mth) @args ...@body))
+(def-lit-macro mth (name args ...body)
+  `(mth @name @args ...@body))
+
+(def-lit-macro def (name args ...body)
+  `(mth @name @args ...@body))
+
+(def-lit-macro def-generic (name args ...body)
+  `(gmth @name @args ...@body))
+
+
+(def-lit-macro gett (...body)
+  `(gett ...@body))
+
+(def-lit-macro sett (...body)
+  `(sett ...@body))

@@ -1,6 +1,6 @@
 (require! "fs" Path "path" "chokidar" (lit Event-emitter) "events")
 
-(include "./file" "./directory")
+(include "./fs-node" "./file" "./directory")
 
 
 (def-curried discover-node  (path seq *tree fs stats)

@@ -9,6 +9,39 @@
 
 ;
 var R = require("ramda");
+
+
+var fmap = R.curry((f, a) => {
+	
+  return a.map(f);
+
+});
+var is = { 
+  string( v ){ 
+    
+      return typeof v === "string";
+    
+   }
+ };
+is.empty__QUERY = (function is$empty__QUERY$(value) {
+  /* is.empty? node_modules/kit/inc/core/fp.sibilant:12:0 */
+
+  return 0 === value.length;
+});
+var athrow = (function athrow$(errType, message) {
+  /* athrow node_modules/kit/inc/core/fp.sibilant:14:0 */
+
+  return () => {
+  	
+    return (new errType(message));
+  
+  };
+});
+var getValueOf = (function getValueOf$(o) {
+  /* get-value-of node_modules/kit/inc/core/fp.sibilant:17:0 */
+
+  return o.getValue();
+});
 var Descriptions = {  };
 var R = require("ramda");
 var { 
@@ -239,16 +272,32 @@ var fs = require("fs"),
     { 
   EventEmitter
  } = require("events");
-var File = extend(EventEmitter.prototype, { 
-  symbol:Symbol("File")
+var FSNode = extend(EventEmitter.prototype, { 
+  symbol:Symbol("FSNode")
  });
-mixin({ 
+Descriptions.FSNode = mixin({ 
   init( path = this.path,fs = this.fs ){ 
     
       this.path = path;this.fs = fs;
+      EventEmitter.call(this);
       return this;
     
    },
+  get stats(  ){ 
+    
+      return stat(this.path);
+    
+   },
+  watch( path = this.path,fs = this.fs ){ 
+    
+      return fs.watch(path);
+    
+   }
+ }, FSNode);
+var File = extend(FSNode, { 
+  symbol:Symbol("File")
+ });
+mixin({ 
   get value(  ){ 
     
       return readFile(this.path);
@@ -321,7 +370,7 @@ mixin({
     
    }
  }, File);
-var Directory = extend(EventEmitter.prototype, { 
+var Directory = extend(FSNode, { 
   symbol:Symbol("Directory")
  });
 mixin({ 

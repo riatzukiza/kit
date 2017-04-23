@@ -26,16 +26,21 @@
 
 
 
-(var project ((create Project-file-system) "."))
+(var project ((create Project-file-system) ""))
 
+(print project)
 ;; (def-curried emit (event value emitter) (.emit emitter ))
+(var compile-on-change (fpipe  (on 'change (node)
+                                   (print "node changed" node)
+                                   (pipe project
+                                         (.find node.path )
+                                         (then  pair (assign pair.js.string (pair.sib.compile)))))))
+
+;; (var compile-on-change (-> ))
 
 (pipe (.watch project.sib ".")
-      (.then  (fpipe (on 'change (node)
-                         (print "node changed" node)
-                         (pipe project
-                               (.find node.path )
-                               (then  pair (assign pair.js.string (pair.sib.compile)))))))
+
+      (.then (=> (node) (compile-on-change node)))
 
       (.catch (aprint "Project watcher" (process.cwd) "has crashed\n")))
 
