@@ -39,10 +39,9 @@
 
 
 (chain-promise (update-git "~/devel/groups/mine/kit")
+               (update-git "~/devel/groups/mine/file-system")
                (update-npm project-path)
 
                (.then (compile-sib ".")
-                      (aprint "done compiling"))
-               )
-
+                      (aprint "done compiling"))) 
 (print "procesin...")
