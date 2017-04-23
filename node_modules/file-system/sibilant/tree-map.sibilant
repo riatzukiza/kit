@@ -8,7 +8,7 @@
           (depth 0)
 
 
-          (def-generic branch? (value) (print "value?" value)(= null value))
+          (def-generic branch? (value) (= null value))
           (def-generic leaf? (value) (not (= null value)))
 
 
@@ -18,7 +18,6 @@
                 (f tree seq)))
 
           (def-generic find (seq (tree this))
-            (print tree)
             (if (empty? seq)
                 tree
                 (.*find tree seq)))
@@ -27,7 +26,6 @@
             (if (.find tree seq) true false))
 
           (def-generic insert (seq  (tree this) )
-            (print tree)
             (if (empty? seq)
                 (do (assign tree.value undefined)
                     tree)

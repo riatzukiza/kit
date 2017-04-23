@@ -6,8 +6,16 @@
 (buffer-string)
 ;; (defvar basename file-name-nondirectory)
 ;; (defvar dirname file-name-directory)
-(defun open-named-eshell (name)
+(defmacro open-with ())
+(defun open-named-eshell (path)
+  (interactive )
+  (helm-find-files path)
   (eshell)
   (rename-buffer name ))
+
+
+(defun open-named-eshell (path)
+  (open-with eshell "Fcwd" path))
+(defun )
 
 (open-named-eshell "foobar")
