@@ -1,11 +1,11 @@
 type(Tree);
-describe(Tree, value(null), parent(null), depth(0), defGeneric(branch__QUERY, value(), print("value?", value), null === value), defGeneric(leaf__QUERY, value(), !(null === value)), defGeneric(descend, seq(f, tree(this)), (function() {
+describe(Tree, value(null), parent(null), depth(0), defGeneric(branch__QUERY, value(), null === value), defGeneric(leaf__QUERY, value(), !(null === value)), defGeneric(descend, seq(f, tree(this)), (function() {
   if (0 === seq.length) {
     return tree;
   } else {
     return f(tree, seq);
   }
-}).call(this)), defGeneric(find, seq(tree(this)), print(tree), (function() {
+}).call(this)), defGeneric(find, seq(tree(this)), (function() {
   if (0 === seq.length) {
     return tree;
   } else {
@@ -17,7 +17,7 @@ describe(Tree, value(null), parent(null), depth(0), defGeneric(branch__QUERY, va
   } else {
     return false;
   }
-}).call(this)), defGeneric(insert, seq(tree(this)), print(tree), (function() {
+}).call(this)), defGeneric(insert, seq(tree(this)), (function() {
   if (0 === seq.length) {
     tree.value = undefined;
     return tree;
@@ -25,7 +25,7 @@ describe(Tree, value(null), parent(null), depth(0), defGeneric(branch__QUERY, va
     return let(node(tree._insert(seq))(), node.depth = (1 + tree.depth);, node.insert(seq.slice(1)));
   }
 }).call(this)), defGeneric(set, seq(value, tree(this)), tree.insert(seq).value = value;), defGeneric(add, key(tree(this), _children(tree._children)), (_children.get(key) || create(tree)(null, tree))), traverseBranches__QUERY(true), defGeneric(each, f(traverseBranches__QUERY, leaf__QUERY, _children), var preorderTraverse = (function preorderTraverse$(node, k) {
-  /* preorder-traverse ../file-system/sib/tree-map.sibilant:48:12 */
+  /* preorder-traverse ../file-system/sib/tree-map.sibilant:46:12 */
 
   f(node, k);
   return node.each(f);
@@ -34,7 +34,7 @@ describe(Tree, value(null), parent(null), depth(0), defGeneric(branch__QUERY, va
     return _children.each(preorderTraverse, true, leaf__QUERY, _children);
   } else {
     return node(k).forEach((function(_children) {
-      /* ../file-system/sib/tree-map.sibilant:53:16 */
+      /* ../file-system/sib/tree-map.sibilant:51:16 */
     
       return (function() {
         if (leaf__QUERY(node)) {
