@@ -1,5 +1,6 @@
 (namespace filesystem)
 (include "kit/macros")
+(include "kit/header")
 
 (import-namespace kit)
 
