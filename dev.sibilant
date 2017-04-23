@@ -1,5 +1,6 @@
 (pipe "source-map-support" require .install)
 (source-mapping-url "./dev.map")
+
 (include "./macros")
 (import-namespace kit)
 
@@ -9,18 +10,14 @@
 (var Descriptions {})
 (require! R "ramda")
 
-
-
 (require! (lit create extend mixin cond partially-apply-after ) "./js/util"
 
           (lit File-system File) "file-system"
           Path 'path
-          (lit transpile-sibilant) "./js/sibilant-context.js"
-          )
+          (lit transpile-sibilant) "./js/sibilant-context.js")
 
 
 
-(print File File-system)
 (include "./dev/sibilant-file"
          "./dev/javascript-file"
          "./dev/project-pair"
