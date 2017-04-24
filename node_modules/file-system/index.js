@@ -153,7 +153,7 @@ is.empty__QUERY = (function is$empty__QUERY$(value) {
   return 0 === value.length;
 });
 var athrow = (function athrow$(errType, message) {
-  /* athrow sibilant/index.sibilant:12:0 */
+  /* athrow sibilant/index.sibilant:13:0 */
 
   return () => {
   	
@@ -162,7 +162,7 @@ var athrow = (function athrow$(errType, message) {
   };
 });
 var getValueOf = (function getValueOf$(o) {
-  /* get-value-of sibilant/index.sibilant:15:0 */
+  /* get-value-of sibilant/index.sibilant:16:0 */
 
   return o.getValue();
 });
@@ -492,7 +492,7 @@ var _directory__QUERY = (stats) => {
   return stats.isDirectory();
 
 };
-var emit = R.invoker(3, "emit");
+var emit = R.invoker(2, "emit");
 var biCurry = R.curryN(2);
 var _ = R._;
 var notSingleDot = (token) => {
@@ -531,11 +531,12 @@ mixin({
   })),
   _findAbsolutePath( path,root ){ 
     
-      return Path.resolve(Path.join(root, path));
+      return Path.resolve(path, root);
     
    },
-  find( path = this.path,[ _tree, root ] = [ this._tree, this.root ],[ _discoverNode, _findAbsolutePath ] = [ this._discoverNode, this._findAbsolutePath ],relPath = _findAbsolutePath(path),seq = tokenize(relPath),node = findValue(seq, _tree),fs = this ){ 
+  find( path = this.path,[ _tree = this._tree, root = this.root ] = [ this._tree, this.root ],[ _discoverNode = this._discoverNode, _findAbsolutePath = this._findAbsolutePath ] = [ this._discoverNode, this._findAbsolutePath ],relPath = _findAbsolutePath(path, root),seq = tokenize(relPath),node = findValue(seq, _tree),fs = this ){ 
     
+      console.log("finding", path);
       return (function() {
         if (node) {
           return Promise.resolve(node);
@@ -545,13 +546,18 @@ mixin({
       }).call(this);
     
    },
-  watch( path = this.path,[ root ] = [ this.root ],[ _findAbsolutePath ] = [ this._findAbsolutePath ],relPath = _findAbsolutePath(path, root),fs = this ){ 
+  watch( path = this.path,[ root = this.root ] = [ this.root ],[ _findAbsolutePath = this._findAbsolutePath ] = [ this._findAbsolutePath ],relPath = _findAbsolutePath(path, root),fs = this ){ 
     
       return fs.find(path, [], [], relPath).then((node) => {
       	
         chokidar.watch(node.path).on("all", (eventName, changedPath, stats) => {
         	
-          return fs.find(Path.relative(root, changedPath)).then(emit(node, eventName));
+          console.log("changed path", changedPath);
+          return fs.find(Path.relative(root, changedPath)).then((changedNode) => {
+          	
+            return node.emit(eventName, changedNode);
+          
+          });
         
         }).once("error", (err) => {
         	
@@ -564,7 +570,7 @@ mixin({
       });
     
    },
-  insert( path = this.path,relPath = .resolve(),type = File,fs = this ){ 
+  insert( path = this.path,[ root = this.root ] = [ this.root ],[ _findAbsolutePath = this._findAbsolutePath ] = [ this._findAbsolutePath ],type = File,relPath = _findAbsolutePath(path, root),fs = this ){ 
     
       return fs.find(path).catch((e) => {
       	
@@ -587,7 +593,7 @@ mixin({
    },
   set( path = this.path,v = this.v,type = File,fs = this ){ 
     
-      return fs.insert(path, type, fs).then((node) => {
+      return fs.insert(path, [], [], type, fs).then((node) => {
       	
         return node.setValue(v);
       
@@ -597,3 +603,178 @@ mixin({
  }, FileSystem);
 exports.FileSystem = FileSystem;
 exports.File = File;
+(function() {
+  if (testing__QUERY) {
+    return (function(fileSystem) {
+      /* ../../../../node_modules/kit/inc/macros.sibilant:165:9 */
+    
+      return Promise.resolve().then((nil) => {
+      	
+        var message = "should get files that exist with in this project from the project root";
+        console.log(message);
+        return fileSystem.find(".").then((function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("found current directory", b, ...others);
+          return b;
+        }));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "should find files that are not the current directory";
+        console.log(message);
+        return Promise.all([ fileSystem.find("js"), fileSystem.find("sib"), fileSystem.find("tests") ]);
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "should resolve .. properly";
+        console.log(message);
+        return fileSystem.find("../kit").then((node) => {
+        	
+          return (function() {
+            if (node.path === "/home/aaron/devel/groups/mine/kit") {
+              return node;
+            } else {
+              throw (new Error("didn't properly resolve .."))
+            }
+          }).call(this);
+        
+        });
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "file created by an insert should be empty";
+        console.log(message);
+        return fileSystem.insert("./empty.txt").then(getValueOf).then(cond(is.empty__QUERY, (function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("inserted successfully", b, ...others);
+          return b;
+        }), athrow(RangeError, "inserted file is not empty")));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "should create a file if it doesn't exist, and fill it with the second argument";
+        console.log(message);
+        return fileSystem.set("./hello.txt", "hello world").then((function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("checking value of setted file", b, ...others);
+          return b;
+        })).then(getValueOf).then(cond(R.pipe(R.toString, R.equals("hello world")), (function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("setted successfuly", b, ...others);
+          return b;
+        }), athrow(TypeError, "setted value is not correct")));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "find always returns the same node for the same file";
+        console.log(message);
+        return Promise.all([ fileSystem.find("./sibilant/index.sibilant"), fileSystem.find("./sibilant/index.sibilant") ]).then(cond(R.apply(R.equals), (function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("files are the same", b, ...others);
+          return b;
+        }), athrow(Error, "found files are not the same")));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "watch events for the same file, consistantly return the same node";
+        console.log(message);
+        return fileSystem.watch("./hello.txt").then((node) => {
+        	
+          return Promise.resolve([ onceThen("add", node), node ]);
+        
+        }).then(cond(R.apply(R.equals), (function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("same node for watcher", b, ...others);
+          return b;
+        }), athrow(Error, "once then did not return the right node")));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "Changing the value of a file node, will trigger a change event on the file system";
+        console.log(message);
+        return fileSystem.watch("./hello.txt").then(R.curry(onceThen)("add")).then((node) => {
+        	
+          node.on("change", (function(b, ...others) {
+            /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+          
+            console.log("a file changed", b, ...others);
+            return b;
+          }));
+          timeout(1000).then((nil) => {
+          	
+            return node.value = "more hello, and now you know";
+          
+          });
+          return Promise.race([ timeout(5000).then((nil) => {
+          	
+            throw (new Error("took too long, assuming that change event will not fire"))
+          
+          }), onceThen("change", node) ]);
+        
+        }).then((function(b, ...others) {
+          /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+        
+          console.log("file change event successfully fired", b, ...others);
+          return b;
+        }));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("file system unit tests succeeded", b, ...others);
+        return b;
+      })).catch((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("failed filesystem unit tests", b, ...others);
+        return b;
+      }));
+    })(create(FileSystem)("."));
+  }
+}).call(this);

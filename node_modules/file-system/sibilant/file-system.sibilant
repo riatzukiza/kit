@@ -24,7 +24,7 @@
 
 (var *directory? (=> (stats) (.is-directory stats)))
 
-(var emit (R.invoker 3 "emit"))
+(var emit (R.invoker 2 "emit"))
 
 (var bi-curry (R.curry-n 2 ))
 (var _ R._)
@@ -60,7 +60,7 @@
                       ( (create File) path))))
 
           (def *find-absolute-path (path root)
-            (Path.resolve (.join Path root path))
+            (Path.resolve path root )
             )
 
           (def-generic find
@@ -71,13 +71,14 @@
 
                ;; need to fix generic to let me do these inside of arrays.
 
-               (rel-path (*find-absolute-path path))
+               (rel-path (*find-absolute-path path root))
 
                (seq (tokenize rel-path ))
                (node (find-value seq *tree)) 
 
                (fs this))
 
+            (print "finding" path)
             (if node
                 (.resolve Promise node)
                 (.then (stat rel-path)
@@ -91,11 +92,24 @@
                (fs this))
 
             (then (.find fs path [] [] rel-path) node
-                  (on (.watch chokidar node.path) 'all (event-name changed-path stats)
-                      (.then (.find fs (Path.relative root changed-path) )
-                             (emit node event-name ))) node))
 
-          (def-generic insert (path (rel-path (.resolve ))( type File ) (fs this))
+                  (on (.watch chokidar node.path) 'all (event-name changed-path stats)
+
+                      (print "changed path" changed-path)
+
+                      (then (.find fs (Path.relative root changed-path ) )
+
+                            changed-node
+
+                            (.emit node event-name changed-node)))
+
+                  node))
+
+          (def-generic insert (path [root ] [ *find-absolute-path ]
+                                    ( type File )
+
+                                    (rel-path (*find-absolute-path path root))
+                                    (fs this))
             (catch (.find fs path)
 
               (let* ((seq (tokenize path))
@@ -106,7 +120,7 @@
 
           (def-generic set (path v ( type File ) (fs this))
 
-            (then (.insert fs path type fs) node (.set-value node v))))
+            (then (.insert fs path [] [] type fs) node (.set-value node v))))
 
 
 

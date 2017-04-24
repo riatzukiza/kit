@@ -31,6 +31,7 @@
 (def compile-project-sib (path)
   (.then (shell (sibilant  (Path.join path "./sib/*.sibilant" ) 
                      "-o"
+
                      (Path.join path "./js")
                      ))
          (aprint "done compiling" path)))

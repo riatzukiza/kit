@@ -8,6 +8,23 @@
                     (.find file-system "." )
                     (.then (aprint "found current directory")))
 
+          (p-test "should find files that are not the current directory"
+                  (.all Promise [
+                        (.find file-system 'js)
+                        (.find file-system 'sib)
+
+                        (.find file-system 'tests)
+
+
+                        ])) 
+          (p-test "should resolve .. properly"
+
+                  (.find file-system "../kit")
+                  (then node (if (= node.path "/home/aaron/devel/groups/mine/kit")
+                                 node
+                                 (throw (new Error "didn't properly resolve .."))))
+                  )
+
           (p-test "file created by an insert should be empty"
                   (.insert file-system "./empty.txt")
 
@@ -50,8 +67,10 @@
           ;;                               (print "directory inserted successfully")
           ;;                               (throw (new Range-error "inserted directory should be empty"))))))
           (p-test  "watch events for the same file, consistantly return the same node"
+
                    (.watch file-system "./hello.txt")
-                   (then node [(once-then "add" node) node])
+
+                   (then node (Promise.resolve [(once-then "add" node) node]))
 
                    (.then (cond (R.apply R.equals)
                                 (aprint "same node for watcher" )
@@ -79,17 +98,18 @@
                                        ]))
 
                    (.then (aprint "file change event successfully fired")))
-          (p-test "Empty directories will be created along a path if they do not exist when inserting a file."
-                  k 1)
+          ;; (p-test "Empty directories will be created along a path if they do not exist when inserting a file."
+          ;;         k 1)
 
-          (p-test "Directories are itteratable"
-                  (.then (.get file-system ".")  (feach  (aprint "lookin at a dir")) ))
+          ;; (p-test "Directories are itteratable"
+          ;;         (.then (.get file-system ".")  (feach  (aprint "lookin at a dir")) ))
 
 
-          (p-test "Directories can be mapped"
-                  (.get file-system ".")
-                  (.then (fmap get-path  ))
-                  (.then (cond (R.all is.string))))
-          (p-test "Elements can be gotten relative to a given directory")
+          ;; (p-test "Directories can be mapped"
+          ;;         (.get file-system ".")
+          ;;         (.then (fmap get-path  ))
+          ;;         (.then (cond (R.all is.string))))
+          ;;(p-test "Elements can be gotten relative to a given directory")
+          (.then (aprint "file system unit tests succeeded"))
 
           (.catch (aprint "failed filesystem unit tests")))))

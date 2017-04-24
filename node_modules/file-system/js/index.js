@@ -27,12 +27,12 @@ is.empty__QUERY = (function is$empty__QUERY$(value) {
   return 0 === value.length;
 });
 var athrow = (function athrow$(errType, message) {
-  /* athrow ../file-system/sib/index.sibilant:12:0 */
+  /* athrow ../file-system/sib/index.sibilant:13:0 */
 
   return ->((new errType(message)));
 });
 var getValueOf = (function getValueOf$(o) {
-  /* get-value-of ../file-system/sib/index.sibilant:15:0 */
+  /* get-value-of ../file-system/sib/index.sibilant:16:0 */
 
   return o.getValue();
 });
@@ -128,7 +128,7 @@ var fillSubDir = (function fillSubDir$(p_subPath$2, seg) {
   return [ catch(thenDo(p, mkdir(subPath))), Path.join(subPath, seg) ];
 });
 var _directory__QUERY = =>(stats(), stats.isDirectory());
-var emit = R.invoker(3, "emit");
+var emit = R.invoker(2, "emit");
 var biCurry = R.curryN(2);
 var _ = R._;
 var notSingleDot = =>(token(), !(token === ".")),
@@ -221,13 +221,13 @@ describe(FileSystem, root("."), init(root(_tree(create(TreeMap)()))), defCurried
 }).call(this))), var _findAbsolutePath = (function _findAbsolutePath$(path, root) {
   /* *find-absolute-path ../file-system/sibilant/file-system.sibilant:62:10 */
 
-  return Path.resolve(Path.join(root, path));
-});, defGeneric(find, path([ _tree, root ], [ _discoverNode, _findAbsolutePath ], relPath(_findAbsolutePath(path)), seq(tokenize(relPath)), node(findValue(seq, _tree)), fs(this)), (function() {
+  return Path.resolve(path, root);
+});, defGeneric(find, path([ _tree, root ], [ _discoverNode, _findAbsolutePath ], relPath(_findAbsolutePath(path, root)), seq(tokenize(relPath)), node(findValue(seq, _tree)), fs(this)), print("finding", path), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {
     return stat(relPath).then(_discoverNode(relPath, seq, _tree));
   }
-}).call(this)), defGeneric(watch, path([ root ], [ _findAbsolutePath ], relPath(_findAbsolutePath(path, root)), fs(this)), then(fs.find(path, [], [], relPath), node, on(chokidar.watch(node.path), "all", eventName(changedPath, stats), fs.find(Path.relative(root, changedPath)).then(emit(node, eventName))), node)), defGeneric(insert, path(relPath(.resolve()), type(File), fs(this)), catch(fs.find(path), let(seq(tokenize(path))(), let(fileName(seq.pop())(), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue()))))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
+}).call(this)), defGeneric(watch, path([ root ], [ _findAbsolutePath ], relPath(_findAbsolutePath(path, root)), fs(this)), then(fs.find(path, [], [], relPath), node, on(chokidar.watch(node.path), "all", eventName(changedPath, stats), print("changed path", changedPath), then(fs.find(Path.relative(root, changedPath)), changedNode, node.emit(eventName, changedNode))), node)), defGeneric(insert, path([ root ], [ _findAbsolutePath ], type(File), relPath(_findAbsolutePath(path, root)), fs(this)), catch(fs.find(path), let(seq(tokenize(path))(), let(fileName(seq.pop())(), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue()))))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, [], [], type, fs), node, node.setValue(v))));
 exports.FileSystem = FileSystem;
 exports.File = File;
