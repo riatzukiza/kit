@@ -7,12 +7,9 @@
 (import-namespace shell)
 
 (require! Path "path")
+(macro -> (...body) ["() => " body])
 
-(macro chain-promise (p ...rest)
-
-       (if (empty? rest)
-           p
-           `(then-do @p (chain-promise ...@rest))))
+(macro chain-promise (...body) `(pipe (.resolve Promise ) ...@(.map body (=> (e) `(.then  (-> @e))))))
 
 (macro dired-shell (path ...body)
        `(shell ...@(map body (b) `(cd [@path] ";" ...@(get b 'contents)))))
@@ -31,7 +28,7 @@
    (rm "-r" "./node_modules")
    (npm install)))
 
-(def compile-sib (path)
+(def compile-project-sib (path)
   (.then (shell (sibilant  (Path.join path "./sib/*.sibilant" ) 
                      "-o"
                      (Path.join path "./js")
@@ -44,17 +41,18 @@
 
 
 
+(.on process 'warning (aprint "WARNING"))
 (def update-kit ()
   (chain-promise
 
-   (compile-sib file-system-path)
-   (compile-sib kit-path)
+   (compile-project-sib file-system-path)
+   (compile-project-sib kit-path)
 
    (update-git file-system-path)
    (update-git kit-path)
 
    (update-npm kit-path)
 
-   (compile-sib ".")))
+   (compile-project-sib ".")))
 
 (update-kit )
