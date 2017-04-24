@@ -1,6 +1,7 @@
 (require! "fs" Path "path" "chokidar" (lit Event-emitter) "events")
 
 (include "./fs-node" "./file" "./directory")
+(import-namespace kit)
 
 
 
@@ -65,11 +66,11 @@
               (path
 
                [ *tree  root ]
-               [ *discover-node *find-absolute-path]
+               [ *discover-node *find-absolute-path ]
 
                ;; need to fix generic to let me do these inside of arrays.
 
-               (rel-path (Path.resolve (.join Path root path)))
+               (rel-path (*find-absolute-path path))
 
                (seq (tokenize rel-path ))
                (node (find-value seq *tree)) 
@@ -84,7 +85,8 @@
           (def-generic watch
               (path
                [root]
-               (rel-path (.resolve Path root path))
+               [ *find-absolute-path ]
+               (rel-path (*find-absolute-path path root))
                (fs this))
 
             (then (.find fs path [] rel-path) node

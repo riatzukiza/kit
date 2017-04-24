@@ -442,7 +442,7 @@ var FileSystem = extend(EventEmitter.prototype, {
   symbol:Symbol("FileSystem")
  });
 var plift = (function plift$(f) {
-  /* plift sibilant/file-system.sibilant:11:0 */
+  /* plift sibilant/file-system.sibilant:12:0 */
 
   return (...args) => {
   	
@@ -472,7 +472,7 @@ var stat = plift(fs.stat),
     writeFile = plift(fs.writeFile),
     readdir = plift(fs.readdir);
 var fillSubDir = (function fillSubDir$(p_subPath$1, seg) {
-  /* fill-sub-dir sibilant/file-system.sibilant:21:0 */
+  /* fill-sub-dir sibilant/file-system.sibilant:22:0 */
 
   var p = p_subPath$1[0],
       subPath = p_subPath$1[1];
@@ -519,7 +519,7 @@ mixin({
     
    },
   _discoverNode:R.curry((function(path, seq, _tree, fs, stats) {
-    /* sibilant/file-system.sibilant:47:28 */
+    /* sibilant/file-system.sibilant:48:28 */
   
     return _tree.set(seq, (function() {
       if (stats.isDirectory()) {
@@ -534,7 +534,7 @@ mixin({
       return Path.resolve(Path.join(root, path));
     
    },
-  find( path = this.path,[ _tree, root ] = [ this._tree, this.root ],[ _discoverNode, _findAbsolutePath ] = [ this._discoverNode, this._findAbsolutePath ],relPath = Path.resolve(Path.join(root, path)),seq = tokenize(relPath),node = findValue(seq, _tree),fs = this ){ 
+  find( path = this.path,[ _tree, root ] = [ this._tree, this.root ],[ _discoverNode, _findAbsolutePath ] = [ this._discoverNode, this._findAbsolutePath ],relPath = _findAbsolutePath(path),seq = tokenize(relPath),node = findValue(seq, _tree),fs = this ){ 
     
       return (function() {
         if (node) {
@@ -545,7 +545,7 @@ mixin({
       }).call(this);
     
    },
-  watch( path = this.path,[ root ] = [ this.root ],relPath = Path.resolve(root, path),fs = this ){ 
+  watch( path = this.path,[ root ] = [ this.root ],[ _findAbsolutePath ] = [ this._findAbsolutePath ],relPath = _findAbsolutePath(path, root),fs = this ){ 
     
       return fs.find(path, [], relPath).then((node) => {
       	

@@ -10,7 +10,7 @@ specify(Directory, extend(FSNode));
 describe(Directory, defGeneric(set, path(value, type(File))), defGeneric(get, null), defGeneric(insert, path(type(File))), defGeneric(each, f()), defGeneric(map, f()), gett(keys, readdir(this.path)), gett(children, this.keys.then(fmap(=>(k(), Path.join(this.path, k))))));
 specify(FileSystem, extend(EventEmitter.prototype));
 var plift = (function plift$(f) {
-  /* plift ../file-system/sib/file-system.sibilant:11:0 */
+  /* plift ../file-system/sib/file-system.sibilant:12:0 */
 
   return promised(args(), f.apply(this, [ args, =>(err(data), (function() {
     if (err) {
@@ -26,7 +26,7 @@ var stat = plift(fs.stat),
     writeFile = plift(fs.writeFile),
     readdir = plift(fs.readdir);
 var fillSubDir = (function fillSubDir$(p_subPath$1, seg) {
-  /* fill-sub-dir ../file-system/sib/file-system.sibilant:21:0 */
+  /* fill-sub-dir ../file-system/sib/file-system.sibilant:22:0 */
 
   var p = p_subPath$1[0],
       subPath = p_subPath$1[1];
@@ -44,13 +44,13 @@ defLitMacro(defCurried, name.apply(this, [ args ].concat(body)), {
   file: "../file-system/sib/file-system.sibilant",
   token: "(",
   type: "expression",
-  line: 47,
+  line: 48,
   col: 3,
   contents: [ {
     file: "../file-system/sib/file-system.sibilant",
     token: "property",
     type: "literal",
-    line: 47,
+    line: 48,
     col: 4,
     contents: [],
     specials: 0,
@@ -59,13 +59,13 @@ defLitMacro(defCurried, name.apply(this, [ args ].concat(body)), {
     file: "../file-system/sib/file-system.sibilant",
     token: "(",
     type: "expression",
-    line: 47,
+    line: 48,
     col: 19,
     contents: [ {
       file: "../file-system/sib/file-system.sibilant",
       token: "R.curry",
       type: "literal",
-      line: 47,
+      line: 48,
       col: 20,
       contents: [],
       specials: 0,
@@ -74,13 +74,13 @@ defLitMacro(defCurried, name.apply(this, [ args ].concat(body)), {
       file: "../file-system/sib/file-system.sibilant",
       token: "(",
       type: "expression",
-      line: 47,
+      line: 48,
       col: 28,
       contents: [ {
         file: "../file-system/sib/file-system.sibilant",
         token: "lambda",
         type: "literal",
-        line: 47,
+        line: 48,
         col: 29,
         contents: [],
         specials: 0,
@@ -90,7 +90,7 @@ defLitMacro(defCurried, name.apply(this, [ args ].concat(body)), {
         file: "../file-system/sib/file-system.sibilant",
         token: " ",
         type: "whitespace",
-        line: 47,
+        line: 48,
         col: 27,
         contents: []
       } ],
@@ -103,7 +103,7 @@ defLitMacro(defCurried, name.apply(this, [ args ].concat(body)), {
       file: "../file-system/sib/file-system.sibilant",
       token: " ",
       type: "whitespace",
-      line: 47,
+      line: 48,
       col: 18,
       contents: []
     } ],
@@ -125,13 +125,13 @@ describe(FileSystem, root("."), init(root(_tree(create(TreeMap)()))), defCurried
     return create(File)(path);
   }
 }).call(this))), var _findAbsolutePath = (function _findAbsolutePath$(path, root) {
-  /* *find-absolute-path ../file-system/sib/file-system.sibilant:60:10 */
+  /* *find-absolute-path ../file-system/sib/file-system.sibilant:61:10 */
 
   return Path.resolve(Path.join(root, path));
-});, defGeneric(find, path([ _tree, root ], [ _discoverNode, _findAbsolutePath ], relPath(Path.resolve(Path.join(root, path))), seq(tokenize(relPath)), node(findValue(seq, _tree)), fs(this)), (function() {
+});, defGeneric(find, path([ _tree, root ], [ _discoverNode, _findAbsolutePath ], relPath(_findAbsolutePath(path)), seq(tokenize(relPath)), node(findValue(seq, _tree)), fs(this)), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {
     return stat(relPath).then(_discoverNode(relPath, seq, _tree, fs));
   }
-}).call(this)), defGeneric(watch, path([ root ], relPath(Path.resolve(root, path)), fs(this)), then(fs.find(path, [], relPath), node, on(chokidar.watch(node.path), "all", eventName(changedPath, stats), fs.find(changedPath, []).then(emit(node, eventName))), node)), defGeneric(insert, path(relPath(.resolve()), type(File), fs(this)), catch(fs.find(path), let_(seq(tokenize(path))(fileName(seq.pop())), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue())))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
+}).call(this)), defGeneric(watch, path([ root ], [ _findAbsolutePath ], relPath(_findAbsolutePath(path, root)), fs(this)), then(fs.find(path, [], relPath), node, on(chokidar.watch(node.path), "all", eventName(changedPath, stats), fs.find(changedPath, []).then(emit(node, eventName))), node)), defGeneric(insert, path(relPath(.resolve()), type(File), fs(this)), catch(fs.find(path), let_(seq(tokenize(path))(fileName(seq.pop())), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue())))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
