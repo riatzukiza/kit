@@ -51,6 +51,44 @@ var {
   cond,
   partiallyApplyAfter
  } = require("kit/js/util");
+var identity = (function identity$(a) {
+  /* identity sibilant/util.sibilant:4:0 */
+
+  return a;
+});
+var setValue = R.curry((v, o) => {
+	
+  return o.value = v;
+
+});
+var reducePromise = R.curry((f, a) => {
+	
+  return a.reduce(f, [ Promise.resolve(), "" ]);
+
+});
+var timeout = (function timeout$(t) {
+  /* timeout ../../../../node_modules/kit/inc/core/function-expressions.sibilant:25:8 */
+
+  return (new Promise((success, fail) => {
+  	
+    var resolve = success,
+        reject = fail;
+    return setTimeout(success, t);
+  
+  }));
+});
+var onceThen = (function onceThen$(event, emitter) {
+  /* once-then sibilant/util.sibilant:26:0 */
+
+  console.log("once then", event, emitter);
+  return (new Promise((success, fail) => {
+  	
+    var resolve = success,
+        reject = fail;
+    return emitter.once(event, success);
+  
+  }));
+});
 var R = require("ramda"),
     assert = require("assert"),
     { 
@@ -110,12 +148,12 @@ var is = {
    }
  };
 is.empty__QUERY = (function is$empty__QUERY$(value) {
-  /* is.empty? sibilant/index.sibilant:12:0 */
+  /* is.empty? sibilant/index.sibilant:10:0 */
 
   return 0 === value.length;
 });
 var athrow = (function athrow$(errType, message) {
-  /* athrow sibilant/index.sibilant:14:0 */
+  /* athrow sibilant/index.sibilant:12:0 */
 
   return () => {
   	
@@ -124,7 +162,7 @@ var athrow = (function athrow$(errType, message) {
   };
 });
 var getValueOf = (function getValueOf$(o) {
-  /* get-value-of sibilant/index.sibilant:17:0 */
+  /* get-value-of sibilant/index.sibilant:15:0 */
 
   return o.getValue();
 });
@@ -491,7 +529,7 @@ mixin({
       }
     }).call(this));
   })),
-  find( path = this.path,[ _tree, _discoverNode, root ] = this[[ "_tree", "_discoverNode", "root" ]],relPath = Path.resolve(root, path),seq = tokenize(path),node = findValue(seq, _tree),fs = this ){ 
+  find( path = this.path,[ _tree, _discoverNode, root ] = [ this._tree, this._discoverNode, this.root ],relPath = Path.resolve(root, path),seq = tokenize(path),node = findValue(seq, _tree),fs = this ){ 
     
       return (function() {
         if (node) {

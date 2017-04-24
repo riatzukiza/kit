@@ -17,22 +17,22 @@ var onceThen = (function onceThen$(event, emitter) {
 });
 defCurried(fmap, f(a), a.map(f));
 var is = lit(var string = (function string$(v) {
-  /* string ../file-system/sib/index.sibilant:10:13 */
+  /* string ../file-system/sib/index.sibilant:8:13 */
 
   return typeof v === "string";
 }););
 is.empty__QUERY = (function is$empty__QUERY$(value) {
-  /* is.empty? ../file-system/sib/index.sibilant:12:0 */
+  /* is.empty? ../file-system/sib/index.sibilant:10:0 */
 
   return 0 === value.length;
 });
 var athrow = (function athrow$(errType, message) {
-  /* athrow ../file-system/sib/index.sibilant:14:0 */
+  /* athrow ../file-system/sib/index.sibilant:12:0 */
 
   return ->((new errType(message)));
 });
 var getValueOf = (function getValueOf$(o) {
-  /* get-value-of ../file-system/sib/index.sibilant:17:0 */
+  /* get-value-of ../file-system/sib/index.sibilant:15:0 */
 
   return o.getValue();
 });
@@ -224,6 +224,6 @@ describe(FileSystem, root("."), init(root(_tree(create(TreeMap)()))), defCurried
   } else {
     return stat(relPath).then(_discoverNode(relPath, seq, _tree, fs));
   }
-}).call(this)), defGeneric(watch, path(fs(this)), then(fs.find(path), node, on(chokidar.watch(path), "all", eventName(path, stats), fs.find(path).then(emit(node, eventName))), node)), defGeneric(insert, path(type(File), fs(this)), catch(fs.find(path), let_(seq(tokenize(path))(fileName(seq.pop())), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue())))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
+}).call(this)), defGeneric(watch, path(fs(this)), then(fs.find(path), node, on(chokidar.watch(path), "all", eventName(path, stats), fs.find(path).then(emit(node, eventName))), node)), defGeneric(insert, path(type(File), fs(this)), catch(fs.find(path), let(seq(tokenize(path))(), let(fileName(seq.pop())(), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue()))))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
 exports.FileSystem = FileSystem;
 exports.File = File;

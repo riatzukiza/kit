@@ -26,3 +26,15 @@
 (def once-then ( event  emitter)
   (print "once then" event emitter)
   (make-promise (.once emitter event success )))
+
+(macro generic (name def args ...body)
+       `(...@(get def 'contents) @name
+            (...@(functor (content-of args) .map (arg)
+
+                          (if (expression? arg)
+                              `(default @(first (get arg 'contents)) @(second (get arg 'contents)))
+                              (or (brace? arg)
+                                  (bracket? arg))
+                              `(default @arg [...@(.map arg.contents (=> (varname) `(get this (quote @varname))))])
+                              `(default @arg (get this (quote @arg))))))
+            ...@body))

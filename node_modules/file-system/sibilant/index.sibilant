@@ -1,5 +1,3 @@
-(namespace filesystem)
-
 (require! R "ramda" "assert" (lit cond create extend mixin) "kit/js/util")
 (var testing? true)
 
