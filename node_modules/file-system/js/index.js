@@ -218,7 +218,11 @@ describe(FileSystem, root("."), init(root(_tree(create(TreeMap)()))), defCurried
   } else {
     return create(File)(path);
   }
-}).call(this))), defGeneric(find, path([ _tree, _discoverNode, root ], [ relPath(Path.resolve(root, path)), seq(tokenize(relPath)), node(findValue(seq, _tree)) ], fs(this)), (function() {
+}).call(this))), var _findAbsolutePath = (function _findAbsolutePath$(path, root) {
+  /* *find-absolute-path ../file-system/sibilant/file-system.sibilant:60:10 */
+
+  return Path.resolve(Path.join(root, path));
+});, defGeneric(find, path([ _tree, root ], [ _discoverNode, _findAbsolutePath ], relPath(Path.resolve(Path.join(root, path))), seq(tokenize(relPath)), node(findValue(seq, _tree)), fs(this)), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {

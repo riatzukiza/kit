@@ -57,15 +57,22 @@
                   (if (.is-directory stats)
                       ( (create Directory) path )
                       ( (create File) path))))
+          (def *find-absolute-path (path root)
+            (Path.resolve (.join Path root path))
+            )
 
           (def-generic find
               (path
 
-               [ *tree *discover-node root ]
+               [ *tree  root ]
+               [ *discover-node *find-absolute-path]
 
-               [ (rel-path (.resolve Path root path))
+               ;; need to fix generic to let me do these inside of arrays.
+
+               (rel-path (Path.resolve (.join Path root path)))
+
                (seq (tokenize rel-path ))
-               (node (find-value seq *tree)) ]
+               (node (find-value seq *tree)) 
 
                (fs this))
 

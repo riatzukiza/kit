@@ -529,7 +529,12 @@ mixin({
       }
     }).call(this));
   })),
-  find( path = this.path,[ _tree, _discoverNode, root ] = [ this._tree, this._discoverNode, this.root ],[ relPath(Path.resolve(root, path)), seq(tokenize(relPath)), node(findValue(seq, _tree)) ] = [ this["relPath(Path.resolve(root, path))"], this["seq(tokenize(relPath))"], this["node(findValue(seq, _tree))"] ],fs = this ){ 
+  _findAbsolutePath( path,root ){ 
+    
+      return Path.resolve(Path.join(root, path));
+    
+   },
+  find( path = this.path,[ _tree, root ] = [ this._tree, this.root ],[ _discoverNode, _findAbsolutePath ] = [ this._discoverNode, this._findAbsolutePath ],relPath = Path.resolve(Path.join(root, path)),seq = tokenize(relPath),node = findValue(seq, _tree),fs = this ){ 
     
       return (function() {
         if (node) {
