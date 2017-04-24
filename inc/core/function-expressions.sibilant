@@ -33,7 +33,9 @@
             (...@(functor (content-of args) .map (arg)
 
                           (if (expression? arg)
-                              `(default @(first (content-of arg))
-                                   @(second (content-of arg)))
+                              `(default @(first (content-of arg)) @(second (content-of arg)))
+                              (or (brace? arg)
+                                  (bracket? arg))
+                              `(default @arg [...@(map arg.contents (varname) `(get this (quote @varname)))])
                               `(default @arg (get this (quote @arg))))))
             ...@body))

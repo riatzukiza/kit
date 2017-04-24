@@ -24,5 +24,4 @@
   (set-timeout success t))
 
 (def once-then ( event  emitter)
-  (print "once then" event emitter)
   (make-promise (.once emitter event success )))

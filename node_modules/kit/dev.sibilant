@@ -40,11 +40,18 @@
                                    ;;(print "node changed" node)
                                    (compile node))))
 
+
+(var sib-fs ((create File-system) "./sib")
+     js-fs ((create File-system) "./js"))
+(pipe (.watch sib-fs ".")
+      (then node (.on node 'change (aprint "node changed")))
+      )
+
 (var compile-on-change (-> ))
 
-(pipe (.watch project.sib ".")
+;; (pipe (.watch project.sib ".")
 
-      (.then (=> (node) (compile-on-change node)))
+;;       (.then (=> (node) (compile-on-change node)))
 
-      (.catch (aprint "Project watcher" "has crashed\n")))
+;;       (.catch (aprint "Project watcher" "has crashed\n")))
 
