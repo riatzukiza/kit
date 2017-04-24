@@ -22,10 +22,10 @@
    (git commit "-m"  ["'update triggered from down stream repl repo'"])
    (git push)))
 
-(def update-npm (path)
+(def update-npm (path name)
   (dired-shell
    path
-   (rm "-r" "./node_modules")
+   (rm "-r" (Path.join "./node_modules" name))
    (npm install)))
 
 (def compile-project-sib (path)
@@ -58,4 +58,5 @@
 
    (compile-project-sib ".")))
 
-(update-kit )
+(then-do (update-kit )
+         (include "./watch.sibilant"))
