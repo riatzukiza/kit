@@ -124,7 +124,7 @@ describe(FileSystem, init(root(_tree(create(TreeMap)()))), defCurried(_discoverN
   } else {
     return create(File)(path);
   }
-}).call(this))), defGeneric(find, path(_tree, _discoverNode, relPath(Path.relative(fs.root, path)), seq(tokenize(path)), node(findValue(seq, _tree)), fs(this)), (function() {
+}).call(this))), defGeneric(find, path([ _tree, _discoverNode, root ], relPath(Path.relative(root, path)), seq(tokenize(path)), node(findValue(seq, _tree)), fs(this)), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {

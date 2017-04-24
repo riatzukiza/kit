@@ -58,10 +58,14 @@
           (def-generic find
               (path
 
+               [
                *tree
                *discover-node
 
-               (rel-path (.relative Path fs.root path))
+               root
+               ]
+
+               (rel-path (.relative Path root path))
                (seq (tokenize path))
                (node (find-value seq *tree))
                (fs this))

@@ -490,7 +490,7 @@ mixin({
       }
     }).call(this));
   })),
-  find( path = this.path,_tree = this._tree,_discoverNode = this._discoverNode,relPath = Path.relative(fs.root, path),seq = tokenize(path),node = findValue(seq, _tree),fs = this ){ 
+  find( path = this.path,[ _tree, _discoverNode, root ] = this[[ "_tree", "_discoverNode", "root" ]],relPath = Path.relative(root, path),seq = tokenize(path),node = findValue(seq, _tree),fs = this ){ 
     
       return (function() {
         if (node) {
