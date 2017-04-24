@@ -40,14 +40,14 @@
      kit-path "~/devel/groups/mine/kit")
 
 
-(chain-promise (update-git file-system-path)
-               (update-git kit-path)
-
-               (compile-sib file-system-path)
+(chain-promise (compile-sib file-system-path)
                (compile-sib kit-path)
+
+               (update-git file-system-path)
+               (update-git kit-path)
 
                (update-npm kit-path)
 
-               (.then (compile-sib ".") (aprint "done compiling"))) 
+               (.then (compile-sib ".") (aprint "done compiling")))
 
 (print "procesin...")
