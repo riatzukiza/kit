@@ -42,10 +42,12 @@
 
 
 (var project-fs ((create File-system) "./sib"))
+
 (var sib-fs ((create File-system) "./sib")
      js-fs ((create File-system) "./js"))
+
 (print sib-fs js-fs)
-;;(pipe (.watch sib-fs "."))
+(pipe (.watch sib-fs "."))
 
 (var compile-on-change (-> ))
 

@@ -63,9 +63,8 @@
 
                [ *tree *discover-node root ]
 
-               (rel-path (.resolve Path root path))
-               (seq (tokenize path))
-               (node (find-value seq *tree))
+               [ (rel-path (.resolve Path root path)) (seq (tokenize path)) (node (find-value seq *tree)) ]
+
                (fs this))
 
             (if node
@@ -73,13 +72,17 @@
                 (.then (stat rel-path)
                        (*discover-node rel-path seq *tree fs))))
 
-          (def-generic watch (path (fs this))
+          (def-generic watch
+              (path
+               [root]
+               (rel-path (.resolve Path root path))
+               (fs this))
 
-            (then (.find fs path) node
-                  (on (.watch chokidar path) 'all (event-name path stats)
-                      (.then (.find fs path) (emit node event-name ))) node))
+            (then (.find fs path [] rel-path) node
+                  (on (.watch chokidar rel-path) 'all (event-name changed-path stats)
+                      (.then (.find fs changed-path [] ) (emit node event-name ))) node))
 
-          (def-generic insert (path ( type File ) (fs this))
+          (def-generic insert (path (rel-path (.resolve ))( type File ) (fs this))
             (catch (.find fs path)
 
               (let* ((seq (tokenize path))
