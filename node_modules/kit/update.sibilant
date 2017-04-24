@@ -32,10 +32,11 @@
    (npm install)))
 
 (def compile-sib (path)
-  (shell (sibilant  (Path.join path "./sib/*.sibilant" ) 
-                   "-o"
-                   (Path.join path "./js")
-                   )))
+  (.then (shell (sibilant  (Path.join path "./sib/*.sibilant" ) 
+                     "-o"
+                     (Path.join path "./js")
+                     ))
+         (aprint "done compiling" path)))
 
 
 (var file-system-path"~/devel/groups/mine/file-system"
@@ -53,6 +54,7 @@
 
  (update-npm kit-path)
 
- (.then (compile-sib ".") (aprint "done compiling")))
+ (compile-sib ".")
+ )
 
 (print "procesin...")
