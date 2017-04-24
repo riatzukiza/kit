@@ -31,6 +31,10 @@
 
 
 
+yo
+
+
+
 (def-generic eval-string (sibilant-string *context name )
   (vm.run-in-context   *context name))
 

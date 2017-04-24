@@ -19,3 +19,12 @@
 (defun )
 
 (open-named-eshell "foobar")
+
+(defun open-dir-frame (path)
+  ;;(interactive "fpath")
+  (focus-frame (make-frame ))
+  (add-hook "after-make-frame-hook"
+            )
+  (find-file path)
+  (maximize-window))
+(open-dir-frame "~/Games/factorio")

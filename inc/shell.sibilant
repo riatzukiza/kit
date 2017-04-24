@@ -3,6 +3,8 @@
 (include "./macros.sibilant")
 (import-namespace kit)
 
+;; I want to redo the shell code to be more stream oriented.
+;; maybe redo is not the best way, I should leave these how they are and add new code else where.
 (alias-macro property prop)
 (require! R "ramda"
           "child_process")

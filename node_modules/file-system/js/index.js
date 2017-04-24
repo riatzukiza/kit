@@ -142,12 +142,12 @@ var _ = R._;
 var notSingleDot = =>(token(), !(token === ".")),
     findValue = =>(seq(_tree), _tree.find(seq).value),
     tokenize = =>($fpipe(), $fpipe.split("/").filter(notSingleDot));
-describe(FileSystem, init(root(_tree(create(TreeMap)()))), defGeneric(find, path(_tree, seq(tokenize(path)), node(findValue(seq, _tree)), fs(this)), (function() {
+describe(FileSystem, init(root(_tree(create(TreeMap)()))), defGeneric(find, path(_tree, fs(this)), let_(absPath(Path.resolve(path))(seq(tokenize(path)), node(findValue(seq, _tree))), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {
-    return stat(path).then(discoverNode(path, seq, _tree, fs));
+    return stat().then(discoverNode(absPath, seq, _tree, fs));
   }
-}).call(this)), defGeneric(watch, path(fs(this)), then(fs.find(path), node, on(chokidar.watch(path), "all", eventName(path, stats), fs.find(Path.relative(fs.root, path)).then(emit(node, eventName))), node)), defGeneric(insert, path(type(File), fs(this)), catch(fs.find(path), let_(seq(tokenize(path))(fileName(seq.pop())), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue())))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
+}).call(this))), defGeneric(watch, path(fs(this)), then(fs.find(path), node, on(chokidar.watch(path), "all", eventName(path, stats), fs.find(Path.relative(fs.root, path)).then(emit(node, eventName))), node)), defGeneric(insert, path(type(File), fs(this)), catch(fs.find(path), let_(seq(tokenize(path))(fileName(seq.pop())), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue())))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
 exports.FileSystem = FileSystem;
 exports.File = File;

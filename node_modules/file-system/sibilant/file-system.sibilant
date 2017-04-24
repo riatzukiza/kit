@@ -49,11 +49,14 @@
 (describe File-system
           (init (root (*tree ((create Tree-map) ))))
 
-          (def-generic find (path *tree (seq (tokenize path)) (node (find-value seq *tree)) (fs this))
-            (if node
-                (.resolve Promise node)
-                (.then (stat path)
-                       (discover-node path seq *tree fs))))
+          (def-generic find (path *tree  (fs this))
+            (let* ((abs-path (Path.resolve path))
+                   (seq (tokenize path))
+                   (node (find-value seq *tree)))
+              (if node
+                  (.resolve Promise node)
+                  (.then (stat )
+                         (discover-node abs-path seq *tree fs)))))
 
           (def-generic watch (path (fs this))
             (then (.find fs path) node

@@ -119,6 +119,7 @@ var evalFile = (function evalFile$(path = this.path, _context = this._context, n
   
   }));
 });
+yo;
 var evalString = (function evalString$(sibilantString = this.sibilantString, _context = this._context, name = this.name) {
   /* eval-string inc/core/function-expressions.sibilant:32:8 */
 
