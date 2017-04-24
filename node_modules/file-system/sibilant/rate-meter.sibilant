@@ -11,13 +11,8 @@
           (gmth start (emitter event  (timer this) (callback (-> (.update timer))))
 
                 (macro set-for (obj ...args)
-                       `(set @obj
-                             ...@(.concat [] (.map args
-                                                   (=> (a)
-                                                       (if (expression? a)
-                                                           [(first a.contents) (second a.content)]
-                                                           a))))))
-
+                       (var parse (=> (a) (if (expression? a) [(first a.contents) (second a.content)] a)))
+                       `(set @obj ...@(.concat [] (.map args parse )))) 
                 (set timer '*running true 'callback callback)
                 ;;(.on emitter event callback)
                 (.on emitter event ))
