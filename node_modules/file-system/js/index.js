@@ -13,7 +13,6 @@ defPromised(timeout, t(), setTimeout(success, t));
 var onceThen = (function onceThen$(event, emitter) {
   /* once-then ../file-system/inc/util.sibilant:26:0 */
 
-  print("once then", event, emitter);
   return makePromise(emitter.once(event, success));
 });
 defCurried(fmap, f(a), a.map(f));

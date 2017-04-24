@@ -44,8 +44,8 @@
 (var sib-fs ((create File-system) "./sib")
      js-fs ((create File-system) "./js"))
 (pipe (.watch sib-fs ".")
-      (then node (.on node 'change (aprint "node changed")))
       )
+(assign console.log console.trace)
 
 (var compile-on-change (-> ))
 
