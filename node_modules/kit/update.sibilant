@@ -53,6 +53,7 @@
    (update-git kit-path)
 
    (update-npm kit-path)
+   (update-npm file-system-path)
 
    (compile-project-sib ".")))
 

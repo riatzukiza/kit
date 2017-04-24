@@ -47,6 +47,9 @@
   `(property @name (R.curry (lambda @args ...@body))))
 
 (describe File-system
+
+          (root ".")
+
           (init (root (*tree ((create Tree-map) ))))
 
           (def-curried *discover-node  (path seq *tree fs stats)
@@ -58,14 +61,9 @@
           (def-generic find
               (path
 
-               [
-               *tree
-               *discover-node
+               [ *tree *discover-node root ]
 
-               root
-               ]
-
-               (rel-path (.relative Path root path))
+               (rel-path (.resolve Path root path))
                (seq (tokenize path))
                (node (find-value seq *tree))
                (fs this))

@@ -473,6 +473,7 @@ var notSingleDot = (token) => {
 
 };
 mixin({ 
+  root:".",
   init( root = this.root,_tree = create(TreeMap)() ){ 
     
       this.root = root;this._tree = _tree;
@@ -490,7 +491,7 @@ mixin({
       }
     }).call(this));
   })),
-  find( path = this.path,[ _tree, _discoverNode, root ] = this[[ "_tree", "_discoverNode", "root" ]],relPath = Path.relative(root, path),seq = tokenize(path),node = findValue(seq, _tree),fs = this ){ 
+  find( path = this.path,[ _tree, _discoverNode, root ] = this[[ "_tree", "_discoverNode", "root" ]],relPath = Path.resolve(root, path),seq = tokenize(path),node = findValue(seq, _tree),fs = this ){ 
     
       return (function() {
         if (node) {

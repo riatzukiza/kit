@@ -212,13 +212,13 @@ defLitMacro(defCurried, name.apply(this, [ args ].concat(body)), {
   closed: true,
   closingIgnored: []
 });
-describe(FileSystem, init(root(_tree(create(TreeMap)()))), defCurried(_discoverNode, path(seq, _tree, fs, stats), _tree.set(seq, (function() {
+describe(FileSystem, root("."), init(root(_tree(create(TreeMap)()))), defCurried(_discoverNode, path(seq, _tree, fs, stats), _tree.set(seq, (function() {
   if (stats.isDirectory()) {
     return create(Directory)(path);
   } else {
     return create(File)(path);
   }
-}).call(this))), defGeneric(find, path([ _tree, _discoverNode, root ], relPath(Path.relative(root, path)), seq(tokenize(path)), node(findValue(seq, _tree)), fs(this)), (function() {
+}).call(this))), defGeneric(find, path([ _tree, _discoverNode, root ], relPath(Path.resolve(root, path)), seq(tokenize(path)), node(findValue(seq, _tree)), fs(this)), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {
