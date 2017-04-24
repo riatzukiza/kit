@@ -43,8 +43,7 @@
 
 (var sib-fs ((create File-system) "./sib")
      js-fs ((create File-system) "./js"))
-(pipe (.watch sib-fs ".")
-      )
+(pipe (.watch sib-fs "."))
 (assign console.log console.trace)
 
 (var compile-on-change (-> ))
