@@ -41,7 +41,7 @@
                                    (compile node))))
 
 
-(var project-fs ((create File-system) "./sib"))
+(var project-fs ((create File-system) "./"))
 
 (var sib-fs ((create File-system) "./sib")
      js-fs ((create File-system) "./js"))

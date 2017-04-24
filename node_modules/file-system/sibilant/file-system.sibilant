@@ -53,11 +53,12 @@
 
           (init (root (*tree ((create Tree-map) ))))
 
-          (def-curried *discover-node  (path seq *tree fs stats)
+          (def-curried *discover-node  (path seq *tree  stats)
             (.set *tree seq
                   (if (.is-directory stats)
                       ( (create Directory) path )
                       ( (create File) path))))
+
           (def *find-absolute-path (path root)
             (Path.resolve (.join Path root path))
             )
@@ -80,7 +81,7 @@
             (if node
                 (.resolve Promise node)
                 (.then (stat rel-path)
-                       (*discover-node rel-path seq *tree fs))))
+                       (*discover-node rel-path seq *tree ))))
 
           (def-generic watch
               (path
@@ -89,9 +90,10 @@
                (rel-path (*find-absolute-path path root))
                (fs this))
 
-            (then (.find fs path [] rel-path) node
+            (then (.find fs path [] [] rel-path) node
                   (on (.watch chokidar node.path) 'all (event-name changed-path stats)
-                      (.then (.find fs changed-path [] ) (emit node event-name ))) node))
+                      (.then (.find fs (Path.relative root changed-path) )
+                             (emit node event-name ))) node))
 
           (def-generic insert (path (rel-path (.resolve ))( type File ) (fs this))
             (catch (.find fs path)

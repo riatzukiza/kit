@@ -518,7 +518,7 @@ mixin({
       return this;
     
    },
-  _discoverNode:R.curry((function(path, seq, _tree, fs, stats) {
+  _discoverNode:R.curry((function(path, seq, _tree, stats) {
     /* sibilant/file-system.sibilant:48:28 */
   
     return _tree.set(seq, (function() {
@@ -540,18 +540,18 @@ mixin({
         if (node) {
           return Promise.resolve(node);
         } else {
-          return stat(relPath).then(_discoverNode(relPath, seq, _tree, fs));
+          return stat(relPath).then(_discoverNode(relPath, seq, _tree));
         }
       }).call(this);
     
    },
   watch( path = this.path,[ root ] = [ this.root ],[ _findAbsolutePath ] = [ this._findAbsolutePath ],relPath = _findAbsolutePath(path, root),fs = this ){ 
     
-      return fs.find(path, [], relPath).then((node) => {
+      return fs.find(path, [], [], relPath).then((node) => {
       	
         chokidar.watch(node.path).on("all", (eventName, changedPath, stats) => {
         	
-          return fs.find(changedPath, []).then(emit(node, eventName));
+          return fs.find(Path.relative(root, changedPath)).then(emit(node, eventName));
         
         }).once("error", (err) => {
         	
