@@ -41,10 +41,11 @@
                                    (compile node))))
 
 
+(var project-fs ((create File-system) "./sib"))
 (var sib-fs ((create File-system) "./sib")
      js-fs ((create File-system) "./js"))
-(pipe (.watch sib-fs "."))
-(assign console.log console.trace)
+(print sib-fs js-fs)
+;;(pipe (.watch sib-fs "."))
 
 (var compile-on-change (-> ))
 
