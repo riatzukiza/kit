@@ -529,7 +529,7 @@ mixin({
       }
     }).call(this));
   })),
-  find( path = this.path,[ _tree, _discoverNode, root ] = [ this._tree, this._discoverNode, this.root ],[ relPath(Path.resolve(root, path)), seq(tokenize(path)), node(findValue(seq, _tree)) ] = [ this["relPath(Path.resolve(root, path))"], this["seq(tokenize(path))"], this["node(findValue(seq, _tree))"] ],fs = this ){ 
+  find( path = this.path,[ _tree, _discoverNode, root ] = [ this._tree, this._discoverNode, this.root ],[ relPath(Path.resolve(root, path)), seq(tokenize(relPath)), node(findValue(seq, _tree)) ] = [ this["relPath(Path.resolve(root, path))"], this["seq(tokenize(relPath))"], this["node(findValue(seq, _tree))"] ],fs = this ){ 
     
       return (function() {
         if (node) {
@@ -544,13 +544,13 @@ mixin({
     
       return fs.find(path, [], relPath).then((node) => {
       	
-        chokidar.watch(relPath).on("all", (eventName, changedPath, stats) => {
+        chokidar.watch(node.path).on("all", (eventName, changedPath, stats) => {
         	
           return fs.find(changedPath, []).then(emit(node, eventName));
         
         }).once("error", (err) => {
         	
-          console.log("error on", "all", "of", "chokidar.watch(relPath)", "given", "eventName(changedPath, stats)");
+          console.log("error on", "all", "of", "chokidar.watch(node.path)", "given", "eventName(changedPath, stats)");
           return console.log(err);
         
         });

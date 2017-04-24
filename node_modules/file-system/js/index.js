@@ -218,12 +218,12 @@ describe(FileSystem, root("."), init(root(_tree(create(TreeMap)()))), defCurried
   } else {
     return create(File)(path);
   }
-}).call(this))), defGeneric(find, path([ _tree, _discoverNode, root ], [ relPath(Path.resolve(root, path)), seq(tokenize(path)), node(findValue(seq, _tree)) ], fs(this)), (function() {
+}).call(this))), defGeneric(find, path([ _tree, _discoverNode, root ], [ relPath(Path.resolve(root, path)), seq(tokenize(relPath)), node(findValue(seq, _tree)) ], fs(this)), (function() {
   if (node) {
     return Promise.resolve(node);
   } else {
     return stat(relPath).then(_discoverNode(relPath, seq, _tree, fs));
   }
-}).call(this)), defGeneric(watch, path([ root ], relPath(Path.resolve(root, path)), fs(this)), then(fs.find(path, [], relPath), node, on(chokidar.watch(relPath), "all", eventName(changedPath, stats), fs.find(changedPath, []).then(emit(node, eventName))), node)), defGeneric(insert, path(relPath(.resolve()), type(File), fs(this)), catch(fs.find(path), let(seq(tokenize(path))(), let(fileName(seq.pop())(), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue()))))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
+}).call(this)), defGeneric(watch, path([ root ], relPath(Path.resolve(root, path)), fs(this)), then(fs.find(path, [], relPath), node, on(chokidar.watch(node.path), "all", eventName(changedPath, stats), fs.find(changedPath, []).then(emit(node, eventName))), node)), defGeneric(insert, path(relPath(.resolve()), type(File), fs(this)), catch(fs.find(path), let(seq(tokenize(path))(), let(fileName(seq.pop())(), thenDo(seq.reduce(fillSubDir, [ Promise.resolve(), "./" ])[0], create(type)(path, fs).setValue()))))), defGeneric(set, path(v, type(File), fs(this)), then(fs.insert(path, type, fs), node, node.setValue(v))));
 exports.FileSystem = FileSystem;
 exports.File = File;

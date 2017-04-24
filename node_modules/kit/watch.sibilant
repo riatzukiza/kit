@@ -48,6 +48,8 @@
 
 (print sib-fs js-fs)
 (pipe (.watch sib-fs "."))
+(on sib-fs 'change (node) (print "hi" node))
+
 
 (var compile-on-change (-> ))
 

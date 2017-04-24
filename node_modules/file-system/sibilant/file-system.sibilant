@@ -63,7 +63,9 @@
 
                [ *tree *discover-node root ]
 
-               [ (rel-path (.resolve Path root path)) (seq (tokenize path)) (node (find-value seq *tree)) ]
+               [ (rel-path (.resolve Path root path))
+               (seq (tokenize rel-path ))
+               (node (find-value seq *tree)) ]
 
                (fs this))
 
@@ -79,7 +81,7 @@
                (fs this))
 
             (then (.find fs path [] rel-path) node
-                  (on (.watch chokidar rel-path) 'all (event-name changed-path stats)
+                  (on (.watch chokidar node.path) 'all (event-name changed-path stats)
                       (.then (.find fs changed-path [] ) (emit node event-name ))) node))
 
           (def-generic insert (path (rel-path (.resolve ))( type File ) (fs this))
