@@ -3,11 +3,7 @@
 (include "./fs-node" "./file" "./directory")
 
 
-(def-curried discover-node  (path seq *tree fs stats)
-  (.set *tree seq
-        (if (.is-directory stats)
-            ( (create Directory) path )
-            ( (create File) path))))
+
 
 
 (specify File-system (extend Event-emitter.prototype))
@@ -44,24 +40,42 @@
 
 (var not-single-dot (=> (token) (not (= token ".")))
      find-value (=> (seq *tree) (get (.find *tree seq) 'value))
-     tokenize (fpipe (.split  "/") (.filter  not-single-dot)))
+     tokenize (fpipe  (.split  "/") (.filter  not-single-dot)))
+
+;; Be you, the app that uses this app is the test for the app
+(def-lit-macro def-curried (name args ...body)
+  `(property @name (R.curry (lambda @args ...@body))))
 
 (describe File-system
           (init (root (*tree ((create Tree-map) ))))
 
-          (def-generic find (path *tree  (fs this))
-            (let* ((abs-path (Path.resolve path))
-                   (seq (tokenize path))
-                   (node (find-value seq *tree)))
-              (if node
-                  (.resolve Promise node)
-                  (.then (stat )
-                         (discover-node abs-path seq *tree fs)))))
+          (def-curried *discover-node  (path seq *tree fs stats)
+            (.set *tree seq
+                  (if (.is-directory stats)
+                      ( (create Directory) path )
+                      ( (create File) path))))
+
+          (def-generic find
+              (path
+
+               *tree
+               *discover-node
+
+               (rel-path (.relative Path fs.root path))
+               (seq (tokenize path))
+               (node (find-value seq *tree))
+               (fs this))
+
+            (if node
+                (.resolve Promise node)
+                (.then (stat rel-path)
+                       (*discover-node rel-path seq *tree fs))))
 
           (def-generic watch (path (fs this))
+
             (then (.find fs path) node
                   (on (.watch chokidar path) 'all (event-name path stats)
-                      (.then (.find fs (.relative Path fs.root path)) (emit node event-name ))) node))
+                      (.then (.find fs path) (emit node event-name ))) node))
 
           (def-generic insert (path ( type File ) (fs this))
             (catch (.find fs path)
