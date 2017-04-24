@@ -47,7 +47,7 @@
 
    (compile-project-sib file-system-path)
    (compile-project-sib kit-path)
-   (shell (sibilant [(Path.join file-system-path "index.sibilant") ] "-o"  ".") )
+   (dired-shell file-system-path (sibilant [(Path.join file-system-path "index.sibilant") ] "-o"  ".") )
 
    (update-git file-system-path)
    (update-git kit-path)
