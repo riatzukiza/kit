@@ -25,7 +25,9 @@
 (def update-npm (path name)
   (dired-shell
    path
-   (rm "-r" (Path.join "./node_modules" name))
+   (rm "-r" (if name
+                (Path.join "./node_modules" name)
+                (Path.join "./node_modules" )))
    (npm install)))
 
 (def compile-project-sib (path)
