@@ -37,10 +37,10 @@
         (then  pair (assign pair.js.string (pair.sib.compile)))))
 
 (var compile-on-change (fpipe  (on 'change  (node)
-                                   (print "node changed" node)
+                                   ;;(print "node changed" node)
                                    (compile node))))
 
-;; (var compile-on-change (-> ))
+(var compile-on-change (-> ))
 
 (pipe (.watch project.sib ".")
 
