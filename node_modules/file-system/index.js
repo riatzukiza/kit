@@ -628,7 +628,26 @@ exports.File = File;
       	
         var message = "should find files that are not the current directory";
         console.log(message);
-        return Promise.all([ fileSystem.find("js"), fileSystem.find("sib"), fileSystem.find("tests") ]);
+        return (function() {
+          /* tests/file-system.sibilant:13:18 */
+        
+          is.true__QUERY = (function is$true__QUERY$(v) {
+            /* is.true? tests/file-system.sibilant:15:19 */
+          
+            return !(!(v));
+          });
+          var fevery = R.curry((f, a) => {
+          	
+            return a.every(f);
+          
+          });
+          var allTrue = (function allTrue$(a) {
+            /* all-true tests/file-system.sibilant:19:19 */
+          
+            return Promise.all(a).then(fevery(is.true__QUERY));
+          });
+          return allTrue([ fileSystem.find("js"), fileSystem.find("sib"), fileSystem.find("tests") ]);
+        }).call(this);
       
       }).then((function(b, ...others) {
         /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
@@ -697,7 +716,7 @@ exports.File = File;
       	
         var message = "find always returns the same node for the same file";
         console.log(message);
-        return Promise.all([ fileSystem.find("./sibilant/index.sibilant"), fileSystem.find("./sibilant/index.sibilant") ]).then(cond(R.apply(R.equals), (function(b, ...others) {
+        return Promise.all([ fileSystem.find("./sib/index.sibilant"), fileSystem.find("./sib/index.sibilant") ]).then(cond(R.apply(R.equals), (function(b, ...others) {
           /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
         
           console.log("files are the same", b, ...others);
@@ -713,7 +732,11 @@ exports.File = File;
       	
         var message = "watch events for the same file, consistantly return the same node";
         console.log(message);
-        return fileSystem.watch("./hello.txt").then((node) => {
+        return fileSystem.set("./hello.txt", "hello world").then((nil) => {
+        	
+          return fileSystem.watch("./hello.txt");
+        
+        }).then((node) => {
         	
           return Promise.resolve([ onceThen("add", node), node ]);
         
@@ -758,6 +781,21 @@ exports.File = File;
           console.log("file change event successfully fired", b, ...others);
           return b;
         }));
+      
+      }).then((function(b, ...others) {
+        /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+      
+        console.log("", b, ...others);
+        return b;
+      })).then((nil) => {
+      	
+        var message = "can create file systems with any path";
+        console.log(message);
+        return (function(sibFs, jsFs) {
+          /* ../../../../node_modules/kit/inc/macros.sibilant:165:9 */
+        
+          return sibFs.watch(".");
+        })(create(FileSystem)("./sib/"), create(FileSystem)("./js/"));
       
       }).then((function(b, ...others) {
         /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */

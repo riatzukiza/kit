@@ -1,30 +1,37 @@
-(async-shell-command "sibilant" "*Sibilant*")
+;; Toying around with terminal commands from emacs, way easier than from common lisp
+;; (async-shell-command "sibilant" "*Sibilant*")
 
-(process-send-string "*Sibilant*" "(console.log \"hi\")")
-(process-send-string "*Sibilant*" "\n")
+;; (process-send-string "*Sibilant*" "(console.log \"hi\")")
+;; (process-send-string "*Sibilant*" "\n")
 
-(buffer-string)
+;; (buffer-string)
+
 ;; (defvar basename file-name-nondirectory)
 ;; (defvar dirname file-name-directory)
-(defmacro open-with ())
-(defun open-named-eshell (path)
-  (interactive )
-  (helm-find-files path)
-  (eshell)
-  (rename-buffer name ))
+;; (defmacro open-with ())
+;; (defun open-named-eshell (path)
+;;   (interactive )
+;;   (helm-find-files path)
+;;   (eshell)
+;;   (rename-buffer name ))
 
 
-(defun open-named-eshell (path)
-  (open-with eshell "Fcwd" path))
-(defun )
+;; (defun open-named-eshell (path)
+;;   (open-with eshell "Fcwd" path))
+;; (defun )
 
-(open-named-eshell "foobar")
+;; (open-named-eshell "foobar")
 
 (defun open-dir-frame (path)
-  ;;(interactive "fpath")
-  (focus-frame (make-frame ))
-  (add-hook "after-make-frame-hook"
-            )
-  (find-file path)
-  (maximize-window))
+  (interactive "fpath")
+
+  (let ((frame-identifier (make-frame )))
+
+    (labels ((hook ()
+                   (focus-frame frame-identifier)
+                   (find-file path)
+                   (maximize-window)))
+
+      (add-hook 'after-make-frame-hook hook))))
+
 (open-dir-frame "~/Games/factorio")

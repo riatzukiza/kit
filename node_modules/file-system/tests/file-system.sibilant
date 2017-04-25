@@ -9,14 +9,24 @@
                     (.then (aprint "found current directory")))
 
           (p-test "should find files that are not the current directory"
-                  (.all Promise [
-                        (.find file-system 'js)
-                        (.find file-system 'sib)
 
-                        (.find file-system 'tests)
+                  (scoped
 
+                   (def is.true? (v) (not (not v)) )
+                   (def-curried fevery (f a)
+                     (.every a f))
 
-                        ])) 
+                   (def all-true (a)
+                     (pipe (Promise.all a)
+                           (.then (fevery is.true? ) )))
+                   (all-true [
+                             (.find file-system 'js)
+                             (.find file-system 'sib)
+
+                             (.find file-system 'tests)
+
+                             ])))
+
           (p-test "should resolve .. properly"
 
                   (.find file-system "../kit")
@@ -47,8 +57,8 @@
           (p-test "find always returns the same node for the same file"
                   (.all Promise
                         [
-                        (.find file-system "./sibilant/index.sibilant")
-                        (.find file-system "./sibilant/index.sibilant")
+                        (.find file-system "./sib/index.sibilant")
+                        (.find file-system "./sib/index.sibilant")
                         ])
                   (.then (cond (R.apply R.equals )
                                (aprint "files are the same")
@@ -68,7 +78,9 @@
           ;;                               (throw (new Range-error "inserted directory should be empty"))))))
           (p-test  "watch events for the same file, consistantly return the same node"
 
-                   (.watch file-system "./hello.txt")
+                   (.set file-system "./hello.txt" "hello world")
+
+                   (then-do (.watch file-system "./hello.txt"))
 
                    (then node (Promise.resolve [(once-then "add" node) node]))
 
@@ -98,6 +110,11 @@
                                        ]))
 
                    (.then (aprint "file change event successfully fired")))
+          (p-test "can create file systems with any path"
+                  (let ((sib-fs ((create File-system) "./sib/"))
+                        (js-fs ((create File-system) "./js/")))
+                    (pipe (.watch sib-fs "." ))) 
+)
           ;; (p-test "Empty directories will be created along a path if they do not exist when inserting a file."
           ;;         k 1)
 
