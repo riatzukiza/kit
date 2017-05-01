@@ -1,0 +1,53 @@
+(require!
+ (lit cond create extend mixin) "kit/js/util"
+
+ R 'ramda
+
+ (lit Event-emitter) 'events
+
+ Path 'path)
+
+(require!
+ 'assert
+ 'chokidar
+ 'fs)
+
+(var testing? true)
+
+(include "../inc/util.sibilant")
+
+
+(def-curried fmap (f a) (.map a f))
+(var is (lit (def string (v) (string? v))))
+
+(def is.empty? (value)
+  (empty? value))
+
+(def athrow (err-type message)
+  (-> (new err-type message)))
+
+(def get-value-of (o) (.get-value o))
+
+(macro p-test (promise  message ...body)
+
+       `(.then (then-do @promise
+                        (var message @message)
+                        (print "###" "does" message "?")
+                        (pipe  ...@body
+                               (then value
+                                     (print "####" message  )
+                                     (print "#### succeeded,  proceeding to next test")
+                                     )))))
+
+
+(include "./fs-node" "./file" "./directory")
+
+
+(include "./tree-map"
+         "./file-system"
+
+         ;;"../tests/file-system.sibilant"
+         )
+
+(export File-system)
+(export File)
