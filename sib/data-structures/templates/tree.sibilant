@@ -28,8 +28,7 @@
           (def-generic insert (seq  (tree this) )
 
             (if (empty? seq)
-                (do (assign tree.value undefined)
-                    tree)
+                (assign tree.value undefined)
 
                 (let ((node (.*insert tree seq)))
 
