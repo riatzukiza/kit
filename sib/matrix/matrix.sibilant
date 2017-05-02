@@ -101,7 +101,7 @@ element of the matrix"
                 (f (.get r x y) x y r))) r)
 
 
-(def-generic Matrix.map (f (m this) width height (result ((create this) width height )))
+(def-generic Matrix.map (f (m this) width height (result ((create Matrix) width height )))
   "standard itterative operator, takes a produces a new Matrix from the successive
 application of that function to every element of the input matrix"
   (loop
