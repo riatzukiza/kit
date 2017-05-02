@@ -39,7 +39,7 @@
             (set (.insert tree  seq) 'value value))
 
           (def-generic add (key (tree this) (*children tree.*children))
-            (or (*children.get key) ((create tree) null tree)))
+            (or (*children.get key) ((create tree) undefined tree)))
 
 
           (def-generic each (f traverse-branches? leaf? *children )
