@@ -15,5 +15,5 @@
 
           (gett keys (readdir this.path))
           (gett children (pipe this.keys
-                               (.then (fpipe (fmap (=> (k) (this.fs.find (Path.join this.path k))))
+                               (.then (fpipe (.map (=> (k) (this.fs.find (Path.join this.path k))))
                                              Promise.all)))))
