@@ -115,4 +115,4 @@
               (.set-value node v)))
           (def-generic delete (path))
           (def-generic each (f))
-          (def-generic ))
+          )
