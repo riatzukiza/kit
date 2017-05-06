@@ -33,6 +33,15 @@
 (macro always (p arg-name ...body)
        `(then-always @p (=> (@arg-name) ...@body)))
 
+(macro shell-command-string (...sub-commands)
+       `(.join
+        [...@(map sub-commands (command)
+                  (if (bracket? command)
+                      `(.join @command "")
+                      (expression? command)
+                      command
+                      `(quote @command))) ] " ")
+       )
 (macro shell-command (...sub-commands)
        `(exec (.join
                [...@(map sub-commands (command)

@@ -1,0 +1,30 @@
+
+;; (def-macro def-generic-macro (name args ...body)
+;;   `(generic @name (def-macro) @args ...@body))
+;; (def-generic-macro test (a)
+;;   a)
+
+(include "./macros.sibilant")
+
+(type Factory)
+(describe Factory
+          (*factories (new Map))
+          (def-generic create (init interface)
+
+            (var type (mixin interface (lit init)))
+            (mixin (create type) init ))
+
+          (def-generic register (name factory *factories))
+
+          (def-generic describe (name))
+          )
+(def create-factory (init interface)
+
+  (var type (mixin interface (lit init)))
+  (mixin (create type) init ))
+(def )
+
+
+
+
+

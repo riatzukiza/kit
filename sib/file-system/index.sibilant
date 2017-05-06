@@ -28,17 +28,7 @@
 
 (def get-value-of (o) (.get-value o))
 
-(macro p-test (promise  message ...body)
-
-       `(.then (then-do @promise
-                        (var message @message)
-                        (print "###" "does" message "?")
-                        (pipe  ...@body
-                               (then value
-                                     (print "####" message  )
-                                     (print "#### succeeded,  proceeding to next test")
-                                     )))))
-
+(include "./macros.sibilant")
 
 (include "./fs-node" "./file" "./directory")
 

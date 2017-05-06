@@ -1,20 +1,22 @@
 (meta
 
+ (macro lit (...body) `(literal ...@(.map body global.lit-macros )))
  (macro describe (name ...body)
         `(mixin (lit ...@body) @name))
 
+ (macro transpile-and-format (form)
+        `(pipe  @form
+                transpile
+                output-formatter))
  (macro def-lit-macro (name args ...body)
 
         (assign name (transpile-name `(@ name)))
 
-        (var t (pipe  `(lambda @args ...@body)
-                      transpile
-                      output-formatter))
+        (var t (transpile-and-format  `(lambda @args ...@body)))
 
         (set lit-macros name (eval t))
 
         null)
- (macro lit (...body) `(literal ...@(.map body global.lit-macros )))
 
  (def global.lit-macros (el)
 

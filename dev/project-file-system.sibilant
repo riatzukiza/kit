@@ -8,17 +8,18 @@
 (var watch-node (R.invoker 0 'watch))
 
 (type Project-file-system )
-(print File-system)
+(var Project-system Project-file-system)
+
+(var all Promise.all)
 
 (def-description Project-file-system (root  (sib ((create File-system) (Path.join root "sib")))
                                             (js ((create File-system) (Path.join root "js")) ))
-
   (def-generic find (path sib js )
 
-    (.then (Promise.all [ (.find sib (sibilant-path path)) (.find js (js-path path)) ])
+    (.then (all [ (.find sib (sibilant-path path)) (.find js (js-path path)) ])
            (create Project-pair)))
 
   (def-generic insert (path js sib)
-    (Promise.all [(.insert sib path) (.insert js path)]))
+    (all [(.insert sib path) (.insert js path)]))
 
   (def set ()))

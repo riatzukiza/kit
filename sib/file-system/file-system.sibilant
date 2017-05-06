@@ -54,7 +54,6 @@
                       ( (create File) path fs))))
 
           (def *find-absolute-path (path root)
-            (print "finding abs path" path root)
             (Path.resolve  root path))
 
           (def-generic find
@@ -113,4 +112,7 @@
           (def-generic set (path v ( type File ) (fs this))
 
             (async-let  ((node (.insert fs path [] [] type fs)))
-              (.set-value node v))))
+              (.set-value node v)))
+          (def-generic delete (path))
+          (def-generic each (f))
+          (def-generic ))
