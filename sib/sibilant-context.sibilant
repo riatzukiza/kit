@@ -4,7 +4,9 @@
 
 (require! 'sibilant 'vm 'fs
           (lit create extend partially-apply-after mixin ) "../js/util"
-          (lit plift) "./promise")
+
+          (lit plift) "./promise"
+          )
 
 
 (export create-context)
