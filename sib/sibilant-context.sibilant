@@ -3,15 +3,13 @@
 (include "../inc/vm")
 
 (require! 'sibilant 'vm 'fs
-          (lit create extend partially-apply-after mixin ) "../js/util" )
+          (lit create extend partially-apply-after mixin ) "../js/util"
+          (lit plift) "./promise")
 
 
 (export create-context)
 
 
-(def plift (f)
-  (promised ((dots args))
-            (apply f [ (dots args) (=> (err data) (if err (reject err) (resolve data))) ])))
 
 (var transpile-sibilant  (fpipe (sibilant sibilant-string)
 

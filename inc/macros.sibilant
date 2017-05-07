@@ -123,9 +123,6 @@
 (macro color (r g b)
        `(p-map (red @r) (green @g) (blue @b)))
 
-(require! R "ramda")
-(import-namespace kit)
-
 (macro gett (name ...body)
        ["get " `(mth @name () ...@body)])
 

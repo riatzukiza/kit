@@ -16,8 +16,17 @@
 
           (def-generic register (name factory *factories))
 
-          (def-generic describe (name))
-          )
+          (def-generic describe (name)))
+(var Namespace )
+(def-describe Namespace (name (*types (new Map)) (*namespaces (new Map)))
+  (*types (new Map))
+  (*namespaces (new Map))
+
+  (init ())
+
+  (def-generic def-type (name object *types))
+  (def-generic use (name)))
+(macro def-type (name args ...body))
 (def create-factory (init interface)
 
   (var type (mixin interface (lit init)))
