@@ -5,7 +5,7 @@
 (include "./inc/macros"
          "./inc/description.sibilant"
          "./inc/lit-macros"
-         "./inc/core/fp")
+         )
 
 
 (meta

@@ -1,6 +1,8 @@
 (var Descriptions {})
 (require! R "ramda")
 
+(include "./inc/core/fp")
+
 
 (macro dotted? (token) `(= (get @token "type") "dots"))
 
