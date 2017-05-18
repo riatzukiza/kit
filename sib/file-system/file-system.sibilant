@@ -1,4 +1,6 @@
 
+(def-curried feach (f a)
+  (.each a f))
 
 (def plift (f)
   (promised ((dots args))
@@ -6,6 +8,7 @@
 
 (var stat (plift fs.stat)
      mkdir (plift fs.mkdir)
+     rmdir (plift fs.rmdir)
      read-file (plift fs.read-file)
      write-file (plift fs.write-file )
      readdir (plift fs.readdir))
@@ -41,6 +44,7 @@
 
 (specify File-system (extend Event-emitter.prototype))
 
+(def is-dir  (c) (= c.symbol Directory.symbol ))
 (describe File-system
 
           (root ".")
@@ -114,5 +118,8 @@
             (async-let  ((node (.insert fs path [] [] type fs)))
               (.set-value node v)))
           (def-generic delete (path))
-          (def-generic each (f))
-          )
+
+          (def-generic each (f)
+            (def itterate (f)
+              (cond is-dir (feach (itterate f)) f))
+            (.then (.find this ".") (itterate f))))

@@ -8,8 +8,14 @@
           (def-generic get ())
           (def-generic insert (path ( type File ) ))
 
-          (def-generic each (f))
+          (def-generic each (f children)
+            (.then children (feach  f)))
+
           (def-generic map (f))
+
+          (def-generic remove (path)
+            (rmdir path))
+
           (gett sub-system ((create File-system)))
 
 

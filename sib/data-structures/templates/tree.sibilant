@@ -49,7 +49,9 @@
               (.each node f))
 
             (if traverse-branches?
+
                 (.each *children preorder-traverse true leaf? *children)
+
                 (each *children (node k)
                       (if (leaf? node)
                           (f node k)
