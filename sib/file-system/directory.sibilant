@@ -5,7 +5,9 @@
 
 
           (def-generic set (path value ( type File ) ))
-          (def-generic get ())
+
+          (def-generic get  (k fs path) (fs.find (Path.join path k)))
+
           (def-generic insert (path ( type File ) ))
 
           (def-generic each (f children)
@@ -13,13 +15,25 @@
 
           (def-generic map (f))
 
-          (def-generic remove (path)
-            (rmdir path))
+          (def-generic recursive-remove (path )
+            (pipe this
+                  (.each (cond is.file (fpipe .delete) is.dir  (fpipe .recursive-remove)))
+                  (.then (fpipe .remove))))
 
-          (gett sub-system ((create File-system)))
+          (def-generic remove-empty-directory (path)
+            (rmdir path)
+            )
+
+          (def-generic remove (path (recursive? false))
+            (if recursive?
+                (.recursive-remove this path)
+                (.remove-empty-directory this path)))
+
+          (gett sub-system ((create File-system) this.path))
 
 
           (gett keys (readdir this.path))
-          (gett children (pipe this.keys
-                               (.then (fpipe (.map (=> (k) (this.fs.find (Path.join this.path k))))
-                                             Promise.all)))))
+
+          (gett get-child (=> (d) (.get this d)))
+
+          (gett children (pipe this.keys (.then (R.pipe (fmap this.get-child) Promise.all)))))

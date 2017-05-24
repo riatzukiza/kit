@@ -7,11 +7,11 @@
  "./async/events"
  )
 
-(macro remember (table value ...body)
-       `(if (.has @table @value)
-            (.get @table @value)
+(macro remember (table key ...body)
+       `(if (.has @table @key)
+            (.get @table @key)
             (let ((value (scoped ...@body)))
-              (.set @table @value value)
+              (.set @table @key value)
               value)))
 (macro let (args ...body)
        `((lambda (...@(.map args.contents (=> (el) (first el.contents))))

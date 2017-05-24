@@ -75,6 +75,7 @@
 
                (fs this))
 
+
             (if node
                 (.resolve Promise node)
                 (.then (stat rel-path)
