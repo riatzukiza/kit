@@ -76,6 +76,7 @@
                (fs this))
 
 
+            (print "finding" path)
             (if node
                 (.resolve Promise node)
                 (.then (stat rel-path)
@@ -122,5 +123,11 @@
 
           (def-generic each (f)
             (def itterate (f)
-              (cond is-dir (feach (itterate f)) f))
-            (.then (.find this ".") (itterate f))))
+              (cond is-dir
+                    (feach (itterate f))
+                    f))
+
+            (print "hi?" this)
+
+            (.then (.find this ".") (itterate f)))
+          )
