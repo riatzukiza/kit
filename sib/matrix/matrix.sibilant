@@ -21,11 +21,12 @@
 
      (assign m (+ m (* (.get A x y) (.get B x y))))))
 
-[ x y ]
-[
-[a1 a2]
-[b1 b2]
-]
+;; [ x y ]
+;; 
+;; [
+;; [a1 a2]
+;; [b1 b2]
+;; ]
 
 (def-generic Matrix.get (x y  width height array get-index)
   "retrieve an element of a matrix by its x and y coordinates "
@@ -72,9 +73,12 @@
   (var i (.get-index this [x y]))
   (set array i (+ (get array i) value)))
 
+
 (def-generic Matrix.add ())
+
 (def-generic Matrix.scalar-multiply (scalar (m this))
   (.map m (=> (v) (* v scalar))))
+
 
 (def-generic Matrix.mult (value (m this))
   (if (number? value)
