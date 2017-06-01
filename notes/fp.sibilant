@@ -1,7 +1,6 @@
 (include "../macros/macros")
 (import-namespace kit)
-(def conditional (value pred action (dots rest))
-  "A functional conditional operator. Immediately evaluates its arguements."
+(."
   (if action
       (if (pred value) (action value)
 

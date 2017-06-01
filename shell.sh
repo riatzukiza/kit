@@ -1,2 +1,2 @@
-sibilant -x update.sibilant
+sibilant -x ./scripts/update.sibilant
 sibilant -x dev.sibilant

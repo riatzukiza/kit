@@ -8,6 +8,25 @@
   "generate an index for an element in a 1d array from 2d coordinates."
   (+ (* i width) j ))
 
+(def-generic Matrix.convolve (B (A this) height width)
+
+  "perform a kernel filter convolution of two matricies '"
+
+  (loop
+
+     (collect m 0)
+
+     (for-up-to x width )
+     (for-up-to y height )
+
+     (assign m (+ m (* (.get A x y) (.get B x y))))))
+
+[ x y ]
+[
+[a1 a2]
+[b1 b2]
+]
+
 (def-generic Matrix.get (x y  width height array get-index)
   "retrieve an element of a matrix by its x and y coordinates "
 

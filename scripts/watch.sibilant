@@ -17,6 +17,16 @@
 
 (include  "file-system/index.sibilant")
 
+;; If I focus on functions and being imparitive too much, i make messy code...
+;; too many objects, and I obsess...
+
+;; I have never quite had as much a hang up working more functionally...
+;; same time, functional code is way harder to write.
+;; and I really need to know what it is that I am writing...
+;; with out knowing exactly what I want, functional code can be hard.
+
+;; maybe not exactly, but I have to uderstand the program enough to know I could doit.
+;; other wise the functional approach is a lot of me staring into space at nothing.
 
 
 (include "./dev/sibilant-file"

@@ -6,4 +6,4 @@
 
 (macro dotted? (token) `(= (get @token "type") "dots"))
 
-(require! (lit create extend mixin cond partially-apply-after ) "kit/js/util")
+(require! (lit create extend mixin conditional cond partially-apply-after ) "kit/js/util")
