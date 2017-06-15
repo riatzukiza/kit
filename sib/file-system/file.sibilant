@@ -4,6 +4,7 @@
 (describe File
 
 
+          (gett name (Path.basename this.path))
           (gett value (read-file this.path))
           (sett value v (then (Promise.resolve v) v
                               (write-file this.path v)))

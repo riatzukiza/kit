@@ -13,7 +13,9 @@
           (def-generic each (f children)
             (.then children (feach  f)))
 
-          (def-generic map (f))
+          (def-generic map (f children)
+            (print "mapping dir")
+            (.then children (fmap f)))
 
           (def-generic recursive-remove (path )
             (pipe this
@@ -36,4 +38,6 @@
 
           (gett get-child (=> (d) (.get this d)))
 
-          (gett children (pipe this.keys (.then (R.pipe (fmap this.get-child) Promise.all)))))
+          (gett children (pipe this.keys
+                               (.then (fpipe (.map this.get-child)
+                                              Promise.all)))))

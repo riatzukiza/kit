@@ -101,21 +101,21 @@ var partiallyApplyAfter = (function partiallyApplyAfter$(f, ...args) {
   });
 });
 exports.partiallyApplyAfter = partiallyApplyAfter;
-Object.prototype.keys = (function Object$prototype$keys$(object = this) {
-  /* Object.prototype.keys inc/core/function-expressions.sibilant:32:8 */
+// Object.prototype.keys = (function Object$prototype$keys$(object = this) {
+//   /* Object.prototype.keys inc/core/function-expressions.sibilant:32:8 */
 
-  return Object.keys(object);
-});
-Object.prototype.each = (function Object$prototype$each$(f = this.f, object = this) {
-  /* Object.prototype.each inc/core/function-expressions.sibilant:32:8 */
+//   return Object.keys(object);
+// });
+// Object.prototype.each = (function Object$prototype$each$(f = this.f, object = this) {
+//   /* Object.prototype.each inc/core/function-expressions.sibilant:32:8 */
 
-  object.keys().each((k, i) => {
+//   object.keys().each((k, i) => {
   	
-    return f(object[k], k, object);
+//     return f(object[k], k, object);
   
-  });
-  return object;
-});
+//   });
+//   return object;
+// });
 Array.prototype.each = (function Array$prototype$each$(f = this.f, array = this) {
   /* Array.prototype.each inc/core/function-expressions.sibilant:32:8 */
 
