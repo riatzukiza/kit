@@ -1,19 +1,18 @@
 (namespace kit )
-(macro transpile-name (name) `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
+
+(macro transpile-name (name)
+       `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
 
 (macro dotted? (token) `(= (get @token "type") "dots"))
+
 (include "./inc/macros"
          "./inc/description.sibilant"
-         "./inc/lit-macros"
-         )
-
+         "./inc/lit-macros")
 
 (meta
  (def transpile.string (node)
    (pipe node.token
          (.replace (regex "(\\r\\n|\\n|\\r)" 'gm) "\\n\"+\""))))
-
-
 
 (macro chain-promise (p ...rest)
        (if (empty? rest)
@@ -25,8 +24,8 @@
        `(then (Promise.all [ ...@(map vars.contents (v) (second v.contents))])
               [...@(map vars.contents (v) (first v.contents))]
               ...@body))
-(alias-macro async-let alet )
 
+(alias-macro async-let alet )
 
 (macro async-let* (vars ...body)
        "Same as async-let, except each variables definition can reference the variables declared before them."

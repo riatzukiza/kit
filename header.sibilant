@@ -1,9 +1,8 @@
+(include "./macros.sibilant")
+(import-namespace kit)
 (var Descriptions {})
 (require! R "ramda")
 
 (include "./inc/core/fp")
-
-
-(macro dotted? (token) `(= (get @token "type") "dots"))
 
 (require! (lit create extend mixin conditional cond partially-apply-after ) "kit/js/util")
