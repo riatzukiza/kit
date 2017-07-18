@@ -9,13 +9,11 @@
 
 (macro => (args ...body)
 
-       [
-       "(" ...(interleave ", " args.contents) ") => {\n\t"
+       ["((" ...(interleave ", " args.contents) ") => {\n\t"
 
-       (indent (apply ^do body))
+             (indent (apply ^do body))
 
-       "\n}"
-       ])
+             "\n})"])
 
 
 (macro functor (obj method args ...body) `(@method @obj (=> @args ...@body)))

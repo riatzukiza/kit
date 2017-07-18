@@ -5,8 +5,7 @@
 (require! 'sibilant 'vm 'fs
           (lit create extend partially-apply-after mixin ) "../js/util"
 
-          (lit plift) "./promise"
-          )
+          (lit plift) "./promise")
 
 
 (export create-context)
@@ -29,11 +28,6 @@
          (pipe (read-file path "utf8")
                (.then (partially-apply-after eval-string name))))
 
-
-
-
-
-
 (def-generic eval-string (sibilant-string *context name )
   (vm.run-in-context   *context name))
 
@@ -48,8 +42,8 @@
       (property *sibilant sibilant)
       eval-string
       eval-file
-      eval-stream
-      )
+      eval-stream)
+
 (export Sibilant-context)
 
 (mixin Sibilant-context exports)

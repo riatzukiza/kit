@@ -1,4 +1,3 @@
-
 (def-curried feach (f a)
   (.each a f))
 
@@ -45,11 +44,12 @@
 (specify File-system (extend Event-emitter.prototype))
 
 (def is-dir  (c) (= c.symbol Directory.symbol ))
-(describe File-system
+
+(def-interface File-system (root (*tree ((create Tree-map) )))
 
           (root ".")
 
-          (init (root (*tree ((create Tree-map) ))))
+          (init )
 
           (def-curried *discover-node  (path seq *tree  fs stats)
             (.set *tree seq
@@ -71,12 +71,11 @@
                (rel-path (*find-absolute-path path root))
 
                (seq (tokenize rel-path ))
-               (node (find-value seq *tree)) 
+               (node (find-value seq *tree))
 
                (fs this))
 
 
-            (print "finding" path)
             (if node
                 (.resolve Promise node)
                 (.then (stat rel-path)
@@ -89,7 +88,8 @@
                (rel-path (*find-absolute-path path root))
                (fs this))
 
-            (async-let ((node (.find fs path [] [] rel-path)))
+
+            (async-let ((node (.find fs path undefined undefined rel-path)))
 
               (pipe chokidar
                     (.watch  node.path)
@@ -129,5 +129,4 @@
 
             (print "hi?" this)
 
-            (.then (.find this ".") (itterate f)))
-          )
+            (.then (.find this ".") (itterate f))))

@@ -1,77 +1,22 @@
-(pipe "source-map-support" require .install)
-(source-mapping-url "./dev.map")
+;; (macro include-root (path)
+;;        (assign sibilant.dir path.token)
+;;        null)
 
-(include "./macros")
+;; (include-root "./script")
+
+(include "../macros")
 (import-namespace kit)
+(include "../header")
 
-(var testing? true)
-;;(include "./header")
-
-(var Descriptions {})
-(require! R "ramda")
-
-(require! (lit create extend mixin cond partially-apply-after ) "./js/util"
-
-          Path 'path
-          (lit transpile-sibilant) "./js/sibilant-context.js")
-
-(include  "file-system/index.sibilant")
-
-;; If I focus on functions and being imparitive too much, i make messy code...
-;; too many objects, and I obsess...
-
-;; I have never quite had as much a hang up working more functionally...
-;; same time, functional code is way harder to write.
-;; and I really need to know what it is that I am writing...
-;; with out knowing exactly what I want, functional code can be hard.
-
-;; maybe not exactly, but I have to uderstand the program enough to know I could doit.
-;; other wise the functional approach is a lot of me staring into space at nothing.
+(include "../sib/file-system/index")
+(include "../sib/data-structures/templates/tree")
+(include "../sib/data-structures/tree-map")
 
 
-(include "./dev/sibilant-file"
-         "./dev/javascript-file"
-         "./dev/project-pair"
-         "./dev/project-file-system"
-         )
+(var src ((create File-system) "../src")
+     js ((create File-system ) "../js"))
 
+(async-let ((node (.watch src ".")))
+  (.on  node 'change (aprint "source file changed")))
 
-
-;;(var project ((create Project-file-system) ""))
-
-(print project)
-;; (def-curried emit (event value  emitter)  (.emit emitter ))
-;; (def compile (node)
-;;   (print "hi" node)
-;;   (pipe project
-;;         (.find node.path )
-;;         (then  pair (assign pair.js.string (pair.sib.compile)))))
-
-(var compile-on-change (fpipe  (on 'change  (node)
-                                   ;;(print "node changed" node)
-                                   (compile node))))
-
-
-;; (var project-fs ((create File-system) "./"))
-
-;; (var sib-fs ((create File-system) "./sib/")
-;;      js-fs ((create File-system) "./js/"))
-
-;; (print sib-fs js-fs)
-
-;; (pipe (.watch project-fs "sib" ))
-
-
-
-;;(on project-fs 'change (node) (print "hi" node))
-
-(include "file-system/tests/file-system")
-
-(var compile-on-change (-> ))
-
-;; (pipe (.watch project.sib ".")
-
-;;       (.then (=> (node) (compile-on-change node)))
-
-;;       (.catch (aprint "Project watcher" "has crashed\n")))
 
