@@ -58,9 +58,9 @@
   (.for-each this f)
   this)
 
-(generic Object.prototype.merge (def)
-         (subject (target this))
+;; (generic Object.prototype.merge (def)
+;;          (subject (target this))
 
-         (each subject (value key)
-               (comment "thing")
-               (set target key value)) target)
+;;          (each subject (value key)
+;;                (comment "thing")
+;;                (set target key value)) target)
