@@ -147,8 +147,6 @@
                      ]))
 
 
-(macro def-curried (name args ...body)
-       `(var @name (curry (lambda @args ...@body))))
 
 (macro def-generic (name args ...body)
        `(generic @name (def) @args ...@body))
