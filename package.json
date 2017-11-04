@@ -8,9 +8,7 @@
     },
     "dependencies": {
         "ramda": "^0.23.0",
-        "source-map-support": "^0.4.8",
-        "file-system": "https://github.com/riatzukiza/file-system"
-
+        "source-map-support": "^0.4.8"
     },
     "devDependencies": {},
     "scripts": {
