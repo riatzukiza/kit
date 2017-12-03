@@ -6,11 +6,11 @@
        `(=> ($fpipe)
             (pipe $fpipe ...@body)))
 
-(def-curried fmap (f a) (.map a f))
 (var is (lit (def string (v) (string? v))))
 
 (def is.empty? (value)
   (empty? value))
+
 (def athrow (err-type message)
   (-> (new err-type message)))
 

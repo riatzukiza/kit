@@ -1,22 +1,46 @@
+(meta
 
-(macro def-generic (name args ...body)
-       `(generic @name (def) @args ...@body))
+ (macro lit (...body) `(literal ...@(.map body global.lit-macros )))
+ (macro describe (name ...body)
+        `(mixin (lit ...@body) @name))
+
+ (macro transpile-and-format (form)
+        `(pipe  @form
+                transpile
+                output-formatter))
+ (macro def-lit-macro (name args ...body)
+
+        (assign name (transpile-name `(@ name)))
+
+        (var t (transpile-and-format  `(lambda @args ...@body)))
+
+        (set lit-macros name (eval t))
+
+        null)
+
+ (def global.lit-macros (el)
 
 
-(def-lit-macro gmth (name args ...body)
-  `(generic @name (mth) @args ...@body))
-(def-lit-macro mth (name args ...body)
-  `(mth @name @args ...@body))
+   (if (expression? el)
 
-(def-lit-macro def (name args ...body)
-  `(mth @name @args ...@body))
+       (do (var name (transpile-name el))
 
-(def-lit-macro def-generic (name args ...body)
-  `(gmth @name @args ...@body))
+           (if (and (literal? (first el.contents))
+                    (has-key? lit-macros name))
 
+               ((get lit-macros name) (dots (rest (content-of el))))
 
-(def-lit-macro gett (...body)
-  `(gett ...@body))
+               `(property ...@(content-of el)))) el))
 
-(def-lit-macro sett (...body)
-  `(sett ...@body))
+ (def lit-macros.init (args ...body)
+   `(init @args ...@body))
+
+ (def lit-macros.gett (name ...body)
+   `(gett @name ...@body))
+
+ (def lit-macros.alias (name from)
+   `(alias @name @from))
+
+ (def lit-macros.sett (name value-name ...body)
+   `(sett @name @value-name ...@body))) 
+

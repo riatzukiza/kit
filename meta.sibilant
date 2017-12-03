@@ -1,0 +1,16 @@
+(namespace kit )
+
+(macro transpile-name (name)
+       `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
+
+(macro dotted? (token) `(= (get @token "type") "dots"))
+
+(include "./inc/macros"
+         "./inc/lit-macros"
+         "./inc/promise")
+
+(meta
+ (def transpile.string (node)
+   (pipe node.token
+         (.replace (regex "(\\r\\n|\\n|\\r)" 'gm) "\\n\"+\""))))
+
