@@ -5,6 +5,9 @@
  "./console"
  "./core/objects.sibilant"
  "./async/events"
+ "./accessors.sibilant"
+ "./loops.sibilant"
+ "./scope.sibilant"
  )
 
 (macro remember (table key ...body)
