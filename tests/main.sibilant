@@ -46,3 +46,12 @@
               (if (.has table "key")
                   (= 5 (remember table "key" 5))
                   (throw (new Error "there was no value at index")))))
+(unit lit-macros ()
+      (unit def ()
+            (expect "a method to be a part of the object litteral"
+                    (var x (lit (def add1 (a) (+ a 1))))
+                    (= (.add1 x 5) 6)))
+      (unit def-generic ()
+            (expect "a method to be a part of the object litteral"
+                    (var x (lit (def add1 (a) (+ a 1))))
+                    (= (.add1 x 5) 6))))

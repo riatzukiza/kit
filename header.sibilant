@@ -2,7 +2,9 @@
 (require! R "ramda")
 
 (include "./inc/core/fp")
-(include "kit-interface/header")
+
+(include "kit-interface/meta")
+(require! (lit Interface) "kit-interface")
 
 (import-namespace kit)
 

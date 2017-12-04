@@ -10,6 +10,20 @@
  "./loops.sibilant"
  "./scope.sibilant")
 
+(macro transpile-name (name)
+       `(get (sibilant (get (first (get @name "contents")) 'token)) 'js))
+
+(macro dotted? (token) `(= (get @token "type") "dots"))
+
+(include "./lit-macros"
+         "./promise")
+
+
+(meta
+ (def transpile.string (node)
+   (pipe node.token
+         (.replace (regex "(\\r\\n|\\n|\\r)" 'gm) "\\n\"+\""))))
+
 (macro remember (table key ...body)
        `(if (.has @table @key)
             (.get @table @key)
@@ -21,6 +35,11 @@
 (macro if! (cond ...body) `(state if @cond  ...@(interleave ";\n" body)))
 
 
+(def-lit-macro def (name args ...body)
+  `(mth @name @args ...@body))
+
+(def-lit-macro def-generic (name args ...body)
+  `(gmth @name @args ...@body))
 ;; (macro def! (name args ...body)
 ;;        (if (includes? name.token  "." )
 ;;            `(assign @name (function method @args ...@body))
