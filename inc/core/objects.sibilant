@@ -1,4 +1,4 @@
-
+(namespace kit)
 (macro define-hidden-method (obj name args ...body)
        `(Object.define-property
          @obj

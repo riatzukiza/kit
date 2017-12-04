@@ -1,4 +1,4 @@
-
+(namespace kit)
 (macro for-up-to (index-name limit ...body)
        "execute a code fragment `limit` times, making available the current index via `index-name`. Typically used to itterate over lists."
 

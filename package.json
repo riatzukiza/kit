@@ -12,7 +12,10 @@
         "kit-interface":"git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-interface",
         "sibilant":"git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/sibilant"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "mocha":"*",
+        "chai":"*"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },

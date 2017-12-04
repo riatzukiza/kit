@@ -1,8 +1,6 @@
 (meta
 
  (macro lit (...body) `(literal ...@(.map body global.lit-macros )))
- (macro describe (name ...body)
-        `(mixin (lit ...@body) @name))
 
  (macro transpile-and-format (form)
         `(pipe  @form

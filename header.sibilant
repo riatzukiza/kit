@@ -1,10 +1,11 @@
 (include "./meta.sibilant")
-(import-namespace kit)
-(var Descriptions {})
 (require! R "ramda")
 
 (include "./inc/core/fp")
 (include "kit-interface/header")
+
+(import-namespace kit)
+
 (import-namespace interface)
 
 (require! (lit create extend mixin conditional cond partially-apply-after ) "kit/js/util")

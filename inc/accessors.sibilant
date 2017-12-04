@@ -1,4 +1,4 @@
-
+(namespace kit)
 (macro alias (name object)
        `(gett @name (get @object (quote @name))))
 (macro gett (name ...body)

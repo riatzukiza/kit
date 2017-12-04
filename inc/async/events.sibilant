@@ -1,3 +1,4 @@
+(namespace kit)
 (macro event (method emitter  event args ...body)
        `(pipe  @emitter
                (@method (quote @event) (=> @args ...@body))

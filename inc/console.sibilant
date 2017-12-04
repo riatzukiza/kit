@@ -1,4 +1,4 @@
-
+(namespace kit)
 (docs "an alias for console.log"
       tags [ logging ])
 (macro print (...args)

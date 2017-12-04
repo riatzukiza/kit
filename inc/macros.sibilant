@@ -1,3 +1,4 @@
+(namespace kit)
 (include
  "./core/predicates"
  "./core/function-expressions"
@@ -7,8 +8,7 @@
  "./async/events"
  "./accessors.sibilant"
  "./loops.sibilant"
- "./scope.sibilant"
- )
+ "./scope.sibilant")
 
 (macro remember (table key ...body)
        `(if (.has @table @key)
@@ -21,10 +21,10 @@
 (macro if! (cond ...body) `(state if @cond  ...@(interleave ";\n" body)))
 
 
-(macro def! (name args ...body)
-       (if (includes? name.token  "." )
-           `(assign @name (function method @args ...@body))
-           `(var @name (function @args ...@body))))
+;; (macro def! (name args ...body)
+;;        (if (includes? name.token  "." )
+;;            `(assign @name (function method @args ...@body))
+;;            `(var @name (function @args ...@body))))
 
 (macro def-generic! (name args ...body)
        `(generic @name (def!) @args  ...@body))
@@ -32,7 +32,7 @@
 (macro color (r g b)
        `(p-map (red @r) (green @g) (blue @b)))
 
-(macro import (thing from) `(var (literal ...@(content-of thing)) (require @from)))
+;;(macro import (thing from) `(var (literal ...@(content-of thing)) (require @from)))
 
 (macro member (name value)
        `(set this (quote @name) @value))

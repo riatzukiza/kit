@@ -1,4 +1,4 @@
-
+(namespace kit)
 (macro def-curried (name args ...body)
        `(var @name (R.curry (=> @args ...@body))))
 
@@ -6,15 +6,15 @@
        `(=> ($fpipe)
             (pipe $fpipe ...@body)))
 
-(var is (lit (def string (v) (string? v))))
+;; (var is (lit (def string (v) (string? v))))
 
-(def is.empty? (value)
-  (empty? value))
+;; (def is.empty? (value)
+;;   (empty? value))
 
-(def athrow (err-type message)
-  (-> (new err-type message)))
+;; (def athrow (err-type message)
+;;   (-> (new err-type message)))
 
-(def get-value-of (o) (.get-value o))
+;; (def get-value-of (o) (.get-value o))
 
 (macro p-test (promise  message ...body)
 

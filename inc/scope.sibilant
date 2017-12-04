@@ -1,5 +1,8 @@
+(namespace kit)
+
 (macro collect (name value ...body)
        `(let (( @name @value)) ...@body @name))
+
 (macro const (...terms)
        (as-statement [ "const " @(pipe terms
                                        (bulk-map  (=> (name value) [name "=" value]))
@@ -23,6 +26,4 @@
               (let* (...@(rest vars.contents)) ...@body))
            `(let (@(first vars.contents)) ...@body)))
 
-(macro let (args ...body)
-       `((lambda (...@(.map args.contents (=> (el) (first el.contents))))
-           ...@body) ...@(.map args.contents (=> (el) (second el.contents)))) )
+
