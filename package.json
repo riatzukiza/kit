@@ -9,8 +9,7 @@
     "dependencies": {
         "ramda": "^0.23.0",
         "source-map-support": "^0.4.8",
-        "kit-interface":"git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-interface",
-        "sibilant":"git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/sibilant"
+        "sibilant":"*"
     },
     "devDependencies": {
         "mocha":"*",
