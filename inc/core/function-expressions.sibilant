@@ -34,6 +34,8 @@
                               `(default @(first (content-of arg)) @(second (content-of arg)))
                               (or (brace? arg)
                                   (bracket? arg))
-                              `(default @arg [...@(map arg.contents (varname) `(get this (quote @varname)))])
+                              `(default @arg [...@(.map arg.contents
+                                                        (=> (varname)
+                                                            `(get this (quote @varname))))])
                               `(default @arg (get this (quote @arg))))))
             ...@body))
