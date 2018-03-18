@@ -1,6 +1,0 @@
-
-
-(macro it (string ...body)
-       `(assert (scoped ...@body) @string))
-
-

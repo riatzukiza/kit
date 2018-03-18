@@ -1,5 +1,4 @@
 (namespace kit)
-
 (import-namespace core)
 ;; Define a function that is curried with the given name and arguments
 (macro curried (name args ...body) `(var @name (curry (# @args ...@body))))

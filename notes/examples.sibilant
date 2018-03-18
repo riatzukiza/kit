@@ -1,5 +1,0 @@
-(var Value (pipe Factory
-                 (.register 'Value
-                            (lit (init (*value))
-                                 (gett value this.*value)
-                                 (sett value v (assign this.*value v))))))
