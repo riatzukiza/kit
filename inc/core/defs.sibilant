@@ -161,9 +161,6 @@
        ["catch(e) " `(block ...@body)])
 
 
-(macro def (name args ...body)
-       `(loose-var @name (defn @args ...@body)))
-
 ;;(const (literal create mixin extend) (require "common/util/funcs"))
 
 
