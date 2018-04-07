@@ -50,6 +50,7 @@
 
 (macro >> (obj f ...args) `(.bind @f @obj ...@args))
 
+
 (macro += (handle value) [handle " += " value])
 
 ;; Define a lambda that returns "this"
@@ -159,6 +160,24 @@
        ["try " `(block ...@body) last])
 (macro catch! (...body)
        ["catch(e) " `(block ...@body)])
+
+(macro defn (name args body)
+       (print "fn" name args body)
+       (if (= name.type "token")
+           ["function " `(method! @name @args (do-block ...@body))]
+
+
+         ["function (" `(comma ...@(mac-sym-con name)) ") {\n"
+          `(do-block ...@(if (undefined? body)
+                             [args]
+                           [args ...body]
+                           )
+                     )
+          "\n}\n"])
+       )
+
+(macro def (name args ...body)
+       `(loose-var @name (defn @args ...@body)))
 
 ;;(const (literal create mixin extend) (require "common/util/funcs"))
 
