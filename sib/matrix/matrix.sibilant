@@ -21,24 +21,12 @@
 
      (assign m (+ m (* (.get A x y) (.get B x y))))))
 
-;; [ x y ]
-;; 
-;; [
-;; [a1 a2]
-;; [b1 b2]
-;; ]
-
 (def-generic Matrix.get (x y  width height array get-index)
   "retrieve an element of a matrix by its x and y coordinates "
 
   ;; These give us a toroidial matrix.
   (assign x (mod (+ x width) width))
   (assign y (mod (+ y height) height))
-  ;; (assign z (mod (+ z depth) depth))
-
-  ;; these give us a planar matrix.
-
-  ;; get an element from a 2d matrix
 
   (get array (get-index  [x y] width))
 

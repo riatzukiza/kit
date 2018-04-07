@@ -50,8 +50,6 @@
 
 (macro >> (obj f ...args) `(.bind @f @obj ...@args))
 
-(>> this (# (a b c) (foo this)))
-
 (macro += (handle value) [handle " += " value])
 
 ;; Define a lambda that returns "this"
