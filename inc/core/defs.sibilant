@@ -146,7 +146,6 @@
 
 
 ;;keywords
-(macro function (name args ...body) ["function " `(method! @name @args ...@body)])
 (macro fn (name args ...body) `(function @name @args (do-block ...@body)))
 
 (macro if! (cond ...body))
@@ -161,20 +160,6 @@
 (macro catch! (...body)
        ["catch(e) " `(block ...@body)])
 
-(macro defn (name args body)
-       (print "fn" name args body)
-       (if (= name.type "token")
-           ["function " `(method! @name @args (do-block ...@body))]
-
-
-         ["function (" `(comma ...@(mac-sym-con name)) ") {\n"
-          `(do-block ...@(if (undefined? body)
-                             [args]
-                           [args ...body]
-                           )
-                     )
-          "\n}\n"])
-       )
 
 (macro def (name args ...body)
        `(loose-var @name (defn @args ...@body)))
