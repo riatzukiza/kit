@@ -1,9 +1,9 @@
 {
     "name": "@kit-js/core",
     "author": "",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "",
-    "main": "index.js",
+    "main": "./core/js/util.js",
     "directories": {
         "test": "tests"
     },
